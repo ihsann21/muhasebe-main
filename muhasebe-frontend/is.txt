@@ -1,0 +1,210 @@
+İnşaat Muhasebe PRO — HTML+CSS+JS UI Brifi (Cursor için)
+Amaç
+
+Ekteki 1. ekranın aynısını modern, göz yormayan bir arayüzle HTML+CSS+JS olarak üret.
+
+Ekteki 2. çizimde işaretli başlıklara gelince altta submenü (mega-dropdown) açılacak.
+
+İkonlar: FontAwesome (CDN).
+
+Renkler: Beyaz, açık gri, “Share” butonundaki yeşil.
+
+--green: Share görselindeki tam hex (bulamazsan fallback #2E7D32)
+
+--gray-50: #FCFCFC
+
+--gray-100: #EFEFEF
+
+--border: #E5E7EB
+
+--text: #1F2937 / --muted: #6B7280
+
+Tipografi: Sistem fontları (Segoe UI, San Francisco, Inter fallback yoksa default sans-serif). 14px–15px baz, başlıklarda 16–18px.
+
+Teknolojiler
+
+Saf HTML + CSS + Vanilla JS (framework yok).
+
+FontAwesome: CDN ile <link> ekle ve <i class="fa-..."> kullan.
+
+Mobil uyum (responsive) + erişilebilirlik (klavye/navigasyon).
+
+Dosya Yapısı
+/index.html
+/assets/ (gerekirse logolar)
+styles.css
+app.js
+
+Genel Yerleşim
+
+Üst Başlık Çubuğu (Topbar)
+
+Sol: küçük kare logo (dişli simge), ürün adı, alt satırda sürüm bilgisi.
+
+Sağ: ana menü buton grubu (Tanımlar, Hareketler, Raporlar, Yardım, Mesajlar, Bilgiler ve Yönetim, Çıkış).
+
+Arkaplan: --gray-100, metin: --text, aktif butonda beyaz kart görünümü ve yeşil ikon.
+
+Yükseklik ~56px; butonlar 40px yükseklik, 12px yatay iç boşluk, 10px border-radius.
+
+Alt Mega-Dropdown (yalnızca işaretli menülerde)
+
+Topbar’ın altında tam genişlikte beyaz panel, üstte ince border (--border).
+
+İçerik: 2–6 kolonlu grid (ekrana göre), her alt madde kart (border-radius 12px, ince border).
+
+Açılma: hover+focus (desktop), click toggle (mobile).
+
+Hızlı Kısayol Şeridi (2. sıra)
+
+Beyaz zemin, ince alt çizgi.
+
+Soldan sağa küçük chip butonları: şantiye & proje, taşeron, personel, tedarikçi, kasa-banka, hareketler, puantaj, maaş, çekler, teklif, ilerleme, evrak, yapsat, araçlar, e-fatura, uzaktan yardım.
+
+Her chip: ikon + etiket, 32px yükseklik, 10px radius; ikon rengi yeşil.
+
+İçerik Alanı
+
+Varsayılan seçili menü: Hareketler.
+
+Büyük kart başlığı: “LOG’lar”. Sağda “Yeni Kayıt” (yeşil dolu) ve “Dışa Aktar” (outline) butonları.
+
+Aşağıda 2–3 sütunlu log kartları (6 örnek). Her karta başlık (İşlem #), alt satır gri metin.
+
+Alt Bilgi (Footer)
+
+Ortalanmış küçük yazı: “Sunucu Tarihi: 16.07.2018 • Lisans: DEMO İNŞAAT • Kullanıcı: Ana Kullanıcı”.
+
+Menü ve Alt Menü İçerikleri
+
+Üst Menü Sırası ve İkonları (FontAwesome sınıfı)
+
+Tanımlar — fa-solid fa-book
+
+Hareketler — fa-solid fa-right-left
+
+Raporlar — fa-solid fa-chart-bar
+
+Yardım — fa-solid fa-life-ring
+
+Mesajlar — fa-solid fa-comments
+
+Bilgiler ve Yönetim — fa-solid fa-cogs
+
+Çıkış — fa-solid fa-right-from-bracket
+
+Alt Menü (yalnızca aşağıdakilerde açılır):
+
+Tanımlar: Şantiyeler & Projeler, Taşeron Kartları, Personel Kartları, Tedarikçi Kartları, Kasa/Banka Tanımları
+
+Raporlar: Hesap Raporu, Şantiye Raporu, Taşeron Raporu, Personel Raporu, Tedarikçi Raporu, Maaş Raporu, Fatura/İrsaliye Raporu, Ödeme & Tahsilat Raporu, Kasa Raporu
+
+Yardım: Acil Destek, Chat Bot
+
+Mesajlar: Muhasebeciler Arası Mesajlaşma
+
+Bilgiler ve Yönetim: Firma Bilgileri, Program Ayarları, Kullanıcı Yönetimi
+
+Çıkış: Değişiklikleri Kaydet ve Kapat
+
+Kısayol Şeridi İkon Eşleşmeleri
+
+Şantiye & Proje fa-project-diagram
+
+Taşeron fa-user-tie
+
+Personel fa-users
+
+Tedarikçi fa-truck-loading
+
+Kasa/Banka fa-university
+
+Hareketler fa-stream
+
+Puantaj fa-clipboard-list
+
+Maaş fa-money-bill-wave
+
+Çekler fa-money-check-alt
+
+Teklif fa-file-signature
+
+İlerleme fa-chart-line
+
+Evrak fa-folder-open
+
+YapSat fa-tools
+
+Araçlar fa-wrench (veya fa-tools)
+
+E-Fatura fa-file-invoice
+
+Uzaktan Yardım fa-hands-helping
+
+Etkileşim Kuralları (JS)
+
+Desktop: mouseenter/focusin ile alt menü aç; mouseleave/focusout ile kapat (200ms gecikmeli, ani kapanma olmasın).
+
+Mobile (<1024px): Üst menü butonu tap ile toggle; yalnızca bir alt menü açık olabilir. Dışarı tıklamada kapat.
+
+Klavye: Tab ile menü öğeleri dolaşılabilir; Enter/Space ile aç/kapat; Esc ile kapat.
+
+aria-expanded, aria-controls, role="menu"/role="menuitem" ekle.
+
+Stil Rehberi (CSS)
+
+Design tokens: :root’ta değişkenler (--green, --gray-50, --gray-100, --border, --text, --muted). Tüm renkler buradan gelsin.
+
+Butonlar:
+
+Dolu yeşil: zemin --green, yazı beyaz, hover’da %6 koyula.
+
+Outline: 1px solid var(--border), hover’da hafif gölge.
+
+Kartlar: beyaz zemin, 1px border (--border), 12px radius, transition: box-shadow 160ms.
+
+Topbar buton aktif hali: beyaz zemin, border, ikon rengi --green.
+
+Kontrast: metin/arka plan WCAG AA (en az 4.5:1) hedefle.
+
+Scrollbar: ince, açık gri (isteğe bağlı).
+
+Animasyon: alt menüye opacity + translateY(6px) ile 120ms giriş.
+
+Responsive Kırılımlar
+
+≥1280px: mega-dropdown 6 sütun.
+
+≥1024px: 4 sütun.
+
+≥640px: 3 sütun.
+
+<640px: 2 sütun; üst menü kaydırılabilir yatay şerit; alt menüler tam genişlik.
+
+Durum Yönetimi
+
+data-active="true" üst menü butonunda.
+
+data-open="true" alt menü kapsayıcısında.
+
+JS ile bu öznitelikleri güncelle; CSS’te görünümleri bunlara bağla.
+
+İçerik Örnekleri (metin)
+
+Log kartı satırı: “Kullanıcı: Ana Kullanıcı • Tarih: 16.07.2018 • Durum: Başarılı”.
+
+Rapor kartı açıklaması: “Önizleme alanı. Filtre ve tarih aralığı burada seçilir.”
+
+Tamamlanmış Sayılma Kriterleri (Acceptance)
+
+ekrandaki şablon piksel yaklaşımıyla aynı hiyerarşi ve yerleşimde.
+
+çizimde işaretli başlıklarda alt menü açılıyor; içerikler yukarıdaki listelerle birebir.
+
+Renk paleti yalnızca yeşil + açık gri + beyaz (siyah/gri tonları metin/border için serbest).
+
+FontAwesome ikonları tüm buton/kısayollarda mevcut.
+
+Mobil ve desktopta kullanılabilir; klavye ile gezilebilir; Esc kapanışı çalışır.
+
+Tasarım sakin, kontrast düzenli, göz yormuyor.

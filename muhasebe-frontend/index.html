@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnşaat Muhasebe PRO - NOA YAZILIM</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="brand-info">
+                <h1>İnşaat Muhasebe PRO</h1>
+                <span class="version">Volass İnşaat</span>
+            </div>
+        </div>
+        
+        <nav class="main-menu">
+            <button class="menu-item" data-menu="tanimlar" aria-expanded="false" aria-controls="submenu-tanimlar">
+                <i class="fa-solid fa-book"></i>
+                <span>Tanımlar</span>
+            </button>
+            <button class="menu-item active" data-menu="hareketler" aria-expanded="false" aria-controls="submenu-hareketler">
+                <i class="fa-solid fa-right-left"></i>
+                <span>Hareketler</span>
+            </button>
+            <button class="menu-item" data-menu="raporlar" aria-expanded="false" aria-controls="submenu-raporlar">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span>Raporlar</span>
+            </button>
+            <button class="menu-item" data-menu="yardim" aria-expanded="false" aria-controls="submenu-yardim">
+                <i class="fa-solid fa-life-ring"></i>
+                <span>Yardım</span>
+            </button>
+            <button class="menu-item" data-menu="mesajlar" aria-expanded="false" aria-controls="submenu-mesajlar">
+                <i class="fa-solid fa-comments"></i>
+                <span>Mesajlar</span>
+            </button>
+            <button class="menu-item" data-menu="bilgiler" aria-expanded="false" aria-controls="submenu-bilgiler">
+                <i class="fa-solid fa-cogs"></i>
+                <span>Bilgiler ve Yönetim</span>
+            </button>
+            <button class="menu-item" data-menu="cikis" aria-expanded="false" aria-controls="submenu-cikis">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Çıkış</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mega Dropdown Menus -->
+    <div class="mega-dropdown" data-open="false">
+        <!-- Tanımlar Submenu -->
+        <div class="submenu" id="submenu-tanimlar" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-project-diagram"></i>
+                    <h3>Şantiyeler & Projeler</h3>
+                    <p>Şantiye ve proje tanımları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <h3>Taşeron Kartları</h3>
+                    <p>Taşeron bilgileri yönetimi</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>Personel Kartları</h3>
+                    <p>Personel kayıtları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-truck-loading"></i>
+                    <h3>Tedarikçi Kartları</h3>
+                    <p>Tedarikçi bilgileri</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-university"></i>
+                    <h3>Kasa/Banka Tanımları</h3>
+                    <p>Finansal hesap tanımları</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Raporlar Submenu -->
+        <div class="submenu" id="submenu-raporlar" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h3>Hesap Raporu</h3>
+                    <p>Genel hesap durumu</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-hard-hat"></i>
+                    <h3>Şantiye Raporu</h3>
+                    <p>Şantiye bazlı raporlar</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <h3>Taşeron Raporu</h3>
+                    <p>Taşeron performans analizi</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>Personel Raporu</h3>
+                    <p>Personel çalışma raporları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-truck"></i>
+                    <h3>Tedarikçi Raporu</h3>
+                    <p>Tedarikçi analiz raporları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <h3>Maaş Raporu</h3>
+                    <p>Personel maaş özetleri</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <h3>Fatura/İrsaliye Raporu</h3>
+                    <p>Fatura ve irsaliye takibi</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <h3>Ödeme & Tahsilat Raporu</h3>
+                    <p>Ödeme akışları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-cash-register"></i>
+                    <h3>Kasa Raporu</h3>
+                    <p>Kasa durumu özeti</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yardım Submenu -->
+        <div class="submenu" id="submenu-yardim" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <h3>Acil Destek</h3>
+                    <p>7/24 teknik destek</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-robot"></i>
+                    <h3>Chat Bot</h3>
+                    <p>Otomatik yardım sistemi</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mesajlar Submenu -->
+        <div class="submenu" id="submenu-mesajlar" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-comments"></i>
+                    <h3>Muhasebeciler Arası Mesajlaşma</h3>
+                    <p>Ekip içi iletişim sistemi</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bilgiler ve Yönetim Submenu -->
+        <div class="submenu" id="submenu-bilgiler" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-building"></i>
+                    <h3>Firma Bilgileri</h3>
+                    <p>Şirket profil ayarları</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-sliders-h"></i>
+                    <h3>Program Ayarları</h3>
+                    <p>Sistem konfigürasyonu</p>
+                </div>
+                <div class="submenu-item">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <h3>Kullanıcı Yönetimi</h3>
+                    <p>Kullanıcı yetkileri</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Çıkış Submenu -->
+        <div class="submenu" id="submenu-cikis" role="menu">
+            <div class="submenu-grid">
+                <div class="submenu-item">
+                    <i class="fa-solid fa-save"></i>
+                    <h3>Değişiklikleri Kaydet ve Kapat</h3>
+                    <p>Güvenli çıkış işlemi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item">
+                <i class="fa-solid fa-project-diagram"></i>
+                <span>Şantiye & Proje</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>Taşeron</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Personel</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-truck-loading"></i>
+                <span>Tedarikçi</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-university"></i>
+                <span>Kasa/Banka</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-stream"></i>
+                <span>Hareketler</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Puantaj</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <span>Maaş</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-money-check-alt"></i>
+                <span>Çekler</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Teklif</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>İlerleme</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-folder-open"></i>
+                <span>Evrak</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-tools"></i>
+                <span>YapSat</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-wrench"></i>
+                <span>Araçlar</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>E-Fatura</span>
+            </button>
+            <button class="toolbar-item">
+                <i class="fa-solid fa-hands-helping"></i>
+                <span>Uzaktan Yardım</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header">
+            <h2></h2>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span>Sunucu Tarihi: 16.07.2018</span>
+            <span>•</span>
+            <span>Lisans: DEMO İNŞAAT</span>
+            <span>•</span>
+            <span>Kullanıcı: Ana Kullanıcı</span>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
