@@ -103,7 +103,7 @@ muhasebe-frontend/
 ### Yerel Geliştirme
 ```bash
 # Basit HTTP sunucusu başlat
-python -m http.server 8000
+python3 -m http.server 8000
 # veya
 npx serve .
 ```
