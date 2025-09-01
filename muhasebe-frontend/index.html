@@ -84,47 +84,47 @@
         <!-- Raporlar Submenu -->
         <div class="submenu" id="submenu-raporlar" role="menu">
             <div class="submenu-grid">
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="hesap-raporu" data-report-id="hesap">
                     <i class="fa-solid fa-chart-pie"></i>
                     <h3>Hesap Raporu</h3>
                     <p>Genel hesap durumu</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="santiye-raporu" data-report-id="santiye">
                     <i class="fa-solid fa-hard-hat"></i>
                     <h3>Şantiye Raporu</h3>
                     <p>Şantiye bazlı raporlar</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="taseron-raporu" data-report-id="taseron">
                     <i class="fa-solid fa-user-tie"></i>
                     <h3>Taşeron Raporu</h3>
                     <p>Taşeron performans analizi</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="personel-raporu" data-report-id="personel">
                     <i class="fa-solid fa-users"></i>
                     <h3>Personel Raporu</h3>
                     <p>Personel çalışma raporları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="tedarikci-raporu" data-report-id="tedarikci">
                     <i class="fa-solid fa-truck"></i>
                     <h3>Tedarikçi Raporu</h3>
                     <p>Tedarikçi analiz raporları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="maas-raporu" data-report-id="maas">
                     <i class="fa-solid fa-money-bill-wave"></i>
                     <h3>Maaş Raporu</h3>
                     <p>Personel maaş özetleri</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="fatura-raporu" data-report-id="fatura">
                     <i class="fa-solid fa-file-invoice"></i>
                     <h3>Fatura/İrsaliye Raporu</h3>
                     <p>Fatura ve irsaliye takibi</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="odeme-raporu" data-report-id="odeme">
                     <i class="fa-solid fa-credit-card"></i>
                     <h3>Ödeme & Tahsilat Raporu</h3>
                     <p>Ödeme akışları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" data-report="kasa-raporu" data-report-id="kasa">
                     <i class="fa-solid fa-cash-register"></i>
                     <h3>Kasa Raporu</h3>
                     <p>Kasa durumu özeti</p>
@@ -236,7 +236,7 @@
                 <span>YapSat</span>
             </button>
             <button class="toolbar-item">
-                <i class="fa-solid fa-wrench"></i>
+                <i class="fa-solid fa-car"></i>
                 <span>Araçlar</span>
             </button>
             <button class="toolbar-item">
@@ -252,46 +252,307 @@
 
     <!-- Main Content Area -->
     <main class="main-content">
-        <div class="welcome-screen" id="welcomeScreen">
-            <div class="welcome-content">
-                <div class="welcome-icon">
-                    <i class="fa-solid fa-building"></i>
+        <!-- Module View Container - Modüller buraya yüklenecek -->
+        <div id="moduleViewContainer">
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <h1>İnşaat Muhasebe PRO</h1>
+                    <p>Hoş geldiniz! Başlamak için üstteki menüden bir modül seçin.</p>
+                    <div class="welcome-features">
+                        <div class="feature-item">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <span>Taşeron Yönetimi</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Personel Takibi</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-truck-loading"></i>
+                            <span>Tedarikçi İşlemleri</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-university"></i>
+                            <span>Kasa/Banka</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                            <span>Puantaj</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                            <span>Maaş Hesaplamaları</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-money-check-alt"></i>
+                            <span>Çek Yönetimi</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fa-solid fa-file-invoice"></i>
+                            <span>E-Fatura</span>
+                        </div>
+                    </div>
                 </div>
-                <h1>İnşaat Muhasebe PRO</h1>
-                <p>Hoş geldiniz! Başlamak için üstteki menüden bir modül seçin.</p>
-                <div class="welcome-features">
-                    <div class="feature-item">
-                        <i class="fa-solid fa-user-tie"></i>
-                        <span>Taşeron Yönetimi</span>
+            </div>
+        </div>
+
+        <!-- Report Pages Container -->
+        <div class="report-pages-container" id="reportPagesContainer" style="display: none;">
+            <!-- Breadcrumb -->
+            <div class="report-breadcrumb">
+                <span class="breadcrumb-back" id="breadcrumbBack">
+                    Raporlar
+                </span>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current" id="breadcrumbCurrent">Rapor Adı</span>
+            </div>
+
+            <!-- Report Header -->
+            <div class="report-header">
+                <div class="report-title-section">
+                    <h1 class="report-title" id="reportTitle">Rapor Adı</h1>
+                    <p class="report-description" id="reportDescription">Rapor açıklaması</p>
+                </div>
+                <div class="report-actions">
+                    <button class="btn btn-outline" id="savePresetBtn">
+                        <i class="fa-solid fa-save"></i>
+                        Kaydet
+                    </button>
+                    <button class="btn btn-outline" id="printReportBtn">
+                        <i class="fa-solid fa-print"></i>
+                        Yazdır
+                    </button>
+                    <button class="btn btn-outline" id="exportReportBtn">
+                        <i class="fa-solid fa-download"></i>
+                        Dışa Aktar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="report-filter-bar">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="dateRange">Tarih Aralığı:</label>
+                        <select id="dateRange" class="filter-select">
+                            <option value="today">Bugün</option>
+                            <option value="thisMonth" selected>Bu Ay</option>
+                            <option value="last3Months">Son 3 Ay</option>
+                            <option value="thisYear">Bu Yıl</option>
+                            <option value="custom">Özel</option>
+                        </select>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Personel Takibi</span>
+                    <div class="filter-group">
+                        <label for="searchInput">Arama:</label>
+                        <input type="text" id="searchInput" class="filter-input" placeholder="Cari, şantiye, taşeron...">
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-truck-loading"></i>
-                        <span>Tedarikçi İşlemleri</span>
+                    <div class="filter-group">
+                        <label for="statusFilter">Durum:</label>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">Tümü</option>
+                            <option value="active">Aktif</option>
+                            <option value="completed">Tamamlanan</option>
+                            <option value="pending">Bekleyen</option>
+                        </select>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-university"></i>
-                        <span>Kasa/Banka</span>
+                    <button class="btn btn-primary" id="applyFiltersBtn">
+                        <i class="fa-solid fa-filter"></i>
+                        Uygula
+                    </button>
+                    <button class="btn btn-outline" id="advancedFilterBtn">
+                        <i class="fa-solid fa-cog"></i>
+                        Gelişmiş
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="report-kpi-section" id="reportKpiSection">
+                <div class="kpi-grid">
+                    <!-- KPI cards will be dynamically generated -->
+                </div>
+            </div>
+
+            <!-- Report Tabs -->
+            <div class="report-tabs">
+                <button class="tab-button active" data-tab="summary">
+                    <i class="fa-solid fa-list"></i>
+                    Özet
+                </button>
+                <button class="tab-button" data-tab="charts">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    Grafikler
+                </button>
+                <button class="tab-button" data-tab="details">
+                    <i class="fa-solid fa-table"></i>
+                    Detay
+                </button>
+                <button class="tab-button" data-tab="pivot">
+                    <i class="fa-solid fa-th-large"></i>
+                    Pivot
+                </button>
+                <button class="tab-button" data-tab="log">
+                    <i class="fa-solid fa-history"></i>
+                    Log
+                </button>
+            </div>
+
+            <!-- Report Content -->
+            <div class="report-content">
+                <!-- Summary Tab -->
+                <div class="tab-content active" id="summaryTab">
+                    <div class="summary-grid">
+                        <div class="summary-table">
+                            <h3>Özet Tablo</h3>
+                            <div class="table-container">
+                                <table class="data-table" id="summaryTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Başlık</th>
+                                            <th>Değer</th>
+                                            <th>Değişim</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="summary-cards">
+                            <h3>Mini Kartlar</h3>
+                            <div class="mini-cards-grid" id="miniCardsGrid">
+                                <!-- Mini cards will be populated dynamically -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-clipboard-list"></i>
-                        <span>Puantaj</span>
+                </div>
+
+                <!-- Charts Tab -->
+                <div class="tab-content" id="chartsTab">
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <h3>Ana Grafik</h3>
+                            <div class="chart-placeholder" id="mainChart">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <p>Grafik yükleniyor...</p>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <h3>İkincil Grafik</h3>
+                            <div class="chart-placeholder" id="secondaryChart">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <p>Grafik yükleniyor...</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-money-bill-wave"></i>
-                        <span>Maaş Hesaplamaları</span>
+                </div>
+
+                <!-- Details Tab -->
+                <div class="tab-content" id="detailsTab">
+                    <div class="details-container">
+                        <div class="details-header">
+                            <h3>Detay Tablosu</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-outline" id="exportDetailsBtn">
+                                    <i class="fa-solid fa-download"></i>
+                                    Dışa Aktar
+                                </button>
+                                <button class="btn btn-outline" id="columnSettingsBtn">
+                                    <i class="fa-solid fa-cog"></i>
+                                    Kolonlar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table class="data-table details-table" id="detailsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Açıklama</th>
+                                        <th>Tutar</th>
+                                        <th>Durum</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-money-check-alt"></i>
-                        <span>Çek Yönetimi</span>
+                </div>
+
+                <!-- Pivot Tab -->
+                <div class="tab-content" id="pivotTab">
+                    <div class="pivot-container">
+                        <div class="pivot-config">
+                            <h3>Pivot Konfigürasyonu</h3>
+                            <div class="pivot-fields">
+                                <div class="pivot-field">
+                                    <label>Satır Alanları:</label>
+                                    <select id="rowFields" multiple>
+                                        <option value="santiye">Şantiye</option>
+                                        <option value="taseron">Taşeron</option>
+                                        <option value="personel">Personel</option>
+                                    </select>
+                                </div>
+                                <div class="pivot-field">
+                                    <label>Sütun Alanları:</label>
+                                    <select id="columnFields" multiple>
+                                        <option value="ay">Ay</option>
+                                        <option value="yil">Yıl</option>
+                                        <option value="durum">Durum</option>
+                                    </select>
+                                </div>
+                                <div class="pivot-field">
+                                    <label>Değer:</label>
+                                    <select id="valueField">
+                                        <option value="tutar">Tutar</option>
+                                        <option value="adet">Adet</option>
+                                        <option value="ortalama">Ortalama</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" id="applyPivotBtn">
+                                <i class="fa-solid fa-play"></i>
+                                Uygula
+                            </button>
+                        </div>
+                        <div class="pivot-result">
+                            <h3>Pivot Sonucu</h3>
+                            <div class="pivot-table-container" id="pivotTableContainer">
+                                <p>Pivot tablosu oluşturmak için yukarıdaki ayarları kullanın.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <i class="fa-solid fa-file-invoice"></i>
-                        <span>E-Fatura</span>
+                </div>
+
+                <!-- Log Tab -->
+                <div class="tab-content" id="logTab">
+                    <div class="log-container">
+                        <h3>Rapor Geçmişi</h3>
+                        <div class="log-list" id="logList">
+                            <!-- Log entries will be populated dynamically -->
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Summary Footer -->
+            <div class="report-summary-footer">
+                <div class="summary-stats">
+                    <span class="stat-item">
+                        <strong>Toplam:</strong> <span id="totalAmount">0,00 ₺</span>
+                    </span>
+                    <span class="stat-item">
+                        <strong>Ortalama:</strong> <span id="averageAmount">0,00 ₺</span>
+                    </span>
+                    <span class="stat-item">
+                        <strong>Adet:</strong> <span id="totalCount">0</span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -501,6 +762,198 @@
             <span>Kullanıcı: Super Admin Kullanıcı</span>
         </div>
     </footer>
+
+    <!-- Advanced Filter Modal -->
+    <div id="advancedFilterModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gelişmiş Filtreler</h2>
+                <button class="modal-close" id="closeAdvancedModal">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-sections">
+                    <!-- Tarih Filtreleri -->
+                    <div class="filter-section">
+                        <h3><i class="fa-solid fa-calendar"></i> Tarih Filtreleri</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group">
+                                <label for="startDate">Başlangıç Tarihi</label>
+                                <input type="date" id="startDate" class="form-input">
+                            </div>
+                            <div class="filter-group">
+                                <label for="endDate">Bitiş Tarihi</label>
+                                <input type="date" id="endDate" class="form-input">
+                            </div>
+                            <div class="filter-group">
+                                <label for="datePreset">Hızlı Tarih Seçimi</label>
+                                <select id="datePreset" class="form-select">
+                                    <option value="">Özel Tarih</option>
+                                    <option value="today">Bugün</option>
+                                    <option value="yesterday">Dün</option>
+                                    <option value="thisWeek">Bu Hafta</option>
+                                    <option value="lastWeek">Geçen Hafta</option>
+                                    <option value="thisMonth">Bu Ay</option>
+                                    <option value="lastMonth">Geçen Ay</option>
+                                    <option value="thisQuarter">Bu Çeyrek</option>
+                                    <option value="lastQuarter">Geçen Çeyrek</option>
+                                    <option value="thisYear">Bu Yıl</option>
+                                    <option value="lastYear">Geçen Yıl</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kategori Filtreleri -->
+                    <div class="filter-section">
+                        <h3><i class="fa-solid fa-tags"></i> Kategori Filtreleri</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group">
+                                <label for="categoryFilter">Kategori</label>
+                                <select id="categoryFilter" class="form-select" multiple>
+                                    <option value="all">Tümü</option>
+                                    <!-- Kategoriler dinamik olarak yüklenecek -->
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="statusFilter">Durum</label>
+                                <select id="statusFilter" class="form-select" multiple>
+                                    <option value="all">Tümü</option>
+                                    <!-- Durumlar dinamik olarak yüklenecek -->
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="priorityFilter">Öncelik</label>
+                                <select id="priorityFilter" class="form-select">
+                                    <option value="">Tümü</option>
+                                    <option value="high">Yüksek</option>
+                                    <option value="medium">Orta</option>
+                                    <option value="low">Düşük</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tutar Filtreleri -->
+                    <div class="filter-section">
+                        <h3><i class="fa-solid fa-money-bill"></i> Tutar Filtreleri</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group">
+                                <label for="minAmount">Minimum Tutar</label>
+                                <input type="number" id="minAmount" class="form-input" placeholder="0.00">
+                            </div>
+                            <div class="filter-group">
+                                <label for="maxAmount">Maksimum Tutar</label>
+                                <input type="number" id="maxAmount" class="form-input" placeholder="0.00">
+                            </div>
+                            <div class="filter-group">
+                                <label for="currencyFilter">Para Birimi</label>
+                                <select id="currencyFilter" class="form-select">
+                                    <option value="">Tümü</option>
+                                    <option value="TRY">TL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gelişmiş Seçenekler -->
+                    <div class="filter-section">
+                        <h3><i class="fa-solid fa-cog"></i> Gelişmiş Seçenekler</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group">
+                                <label for="sortBy">Sıralama</label>
+                                <select id="sortBy" class="form-select">
+                                    <option value="date">Tarih</option>
+                                    <option value="amount">Tutar</option>
+                                    <option value="name">İsim</option>
+                                    <option value="category">Kategori</option>
+                                    <option value="status">Durum</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="sortOrder">Sıralama Yönü</label>
+                                <select id="sortOrder" class="form-select">
+                                    <option value="desc">Azalan</option>
+                                    <option value="asc">Artan</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="pageSize">Sayfa Başına Kayıt</label>
+                                <select id="pageSize" class="form-select">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="all">Tümü</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Özel Filtreler -->
+                    <div class="filter-section">
+                        <h3><i class="fa-solid fa-filter"></i> Özel Filtreler</h3>
+                        <div class="filter-grid">
+                            <div class="filter-group full-width">
+                                <label for="customSearch">Özel Arama</label>
+                                <input type="text" id="customSearch" class="form-input" placeholder="Özel arama terimleri...">
+                            </div>
+                            <div class="filter-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="includeArchived">
+                                    <span class="checkmark"></span>
+                                    Arşivlenmiş Kayıtları Dahil Et
+                                </label>
+                            </div>
+                            <div class="filter-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="excludeZero">
+                                    <span class="checkmark"></span>
+                                    Sıfır Tutarları Hariç Tut
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-actions">
+                    <button class="btn btn-outline" id="resetFilters">
+                        <i class="fa-solid fa-undo"></i>
+                        Sıfırla
+                    </button>
+                    <button class="btn btn-outline" id="savePreset">
+                        <i class="fa-solid fa-save"></i>
+                        Filtre Kaydet
+                    </button>
+                    <button class="btn btn-primary" id="applyAdvancedFilters">
+                        <i class="fa-solid fa-check"></i>
+                        Uygula
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen Reader Live Region -->
+    <div aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+    <!-- Scroll Control Script -->
+    <script>
+        // Force scroll to top when page loads
+        window.addEventListener('load', function() {
+            window.scrollTo(0, 0);
+        });
+        
+        // Prevent scroll position from being maintained
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+    </script>
 
     <script src="app.js" type="module"></script>
     

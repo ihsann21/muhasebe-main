@@ -10,9 +10,10 @@ export class ToolbarManager {
     }
 
     hideWelcomeScreen() {
+        // Hide welcome screen within module container
         const welcomeScreen = document.getElementById('welcomeScreen');
         if (welcomeScreen) {
-            welcomeScreen.classList.add('hidden');
+            welcomeScreen.style.display = 'none';
         }
     }
 
@@ -20,6 +21,18 @@ export class ToolbarManager {
         this.toolbarItems.forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
+
+                // =================================================================
+                // === YENİ EKLENECEK KOD BAŞLANGICI ===
+                // Herhangi bir toolbar butonuna tıklandığında, önce rapor detay sayfasını
+                // kapatıp ana modül görünümüne geri döndüğümüzden emin oluyoruz.
+                // Bu tek blok, tüm sorunu kökünden çözer.
+                if (window.reportManager) {
+                    window.reportManager.hideReportPage();
+                }
+                // === YENİ EKLENECEK KOD BİTİŞİ ===
+                // =================================================================
+
                 const label = item.querySelector('span').textContent;
                 console.log('Toolbar item clicked:', label);
                 
@@ -39,9 +52,21 @@ export class ToolbarManager {
                 } else if (label === 'YapSat') {
                     console.log('YapSat button clicked!');
                     this.showYapSatModule();
+                } else if (label === 'Evrak') {
+                    console.log('Evrak button clicked!');
+                    this.showEvrakModule();
                 } else if (label === 'E-Fatura') {
                     console.log('E-Fatura button clicked!');
                     this.showEFaturaModule();
+                } else if (label === 'Araçlar') {
+                    console.log('Araçlar button clicked!');
+                    this.showAraclarModule();
+                } else if (label === 'Uzaktan Yardım') {
+                    console.log('Uzaktan Yardım button clicked!');
+                    this.showUzaktanYardimModule();
+                } else if (label === 'Raporlar') {
+                    console.log('Raporlar button clicked!');
+                    this.showRaporlarModule();
                 }
                 // Handle other toolbar items here
             });
@@ -82,10 +107,10 @@ export class ToolbarManager {
         // Update page title
         document.title = 'Taşeron Tanımları - İnşaat Muhasebe PRO - NOA YAZILIM';
         
-        // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        // Update module container instead of main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Taşeron Tanımları</h2>
                     <div class="header-actions">
@@ -259,10 +284,10 @@ export class ToolbarManager {
         // Update page title
         document.title = 'Tedarikçi Tanımları - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
-        // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        // Update module container instead of main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Tedarikçi Tanımları</h2>
                     <div class="header-actions">
@@ -476,9 +501,9 @@ export class ToolbarManager {
         document.title = 'Çek Listesi - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Çek Listesi</h2>
                     <div class="header-actions">
@@ -659,9 +684,9 @@ export class ToolbarManager {
         document.title = 'Çek Listesi - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content with fallback
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Çek Listesi</h2>
                     <div class="header-actions">
@@ -689,6 +714,456 @@ export class ToolbarManager {
         }
     }
 
+    showEvrakModule() {
+        // Hide welcome screen
+        this.hideWelcomeScreen();
+        
+        // Update page title
+        document.title = 'Gelen/Giden Evrak Takibi - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
+        
+        // Update main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
+                <div class="content-header">
+                    <h2>Gelen/Giden Evrak Takibi</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i>
+                            Yeni
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-edit"></i>
+                            Düzelt
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-trash"></i>
+                            Sil
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-paperclip"></i>
+                            Ekler
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-refresh"></i>
+                            Yenile
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excele Aktar
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-print"></i>
+                            Yazdır
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-ellipsis-v"></i>
+                            Detay
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-times"></i>
+                            Çıkış
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-body evrak-content">
+                    <!-- Filter Section -->
+                    <div class="filter-section evrak-filters">
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>Tarih Aralığı:</label>
+                                <div class="date-range">
+                                    <div class="input-with-icon">
+                                        <input type="text" class="filter-input" placeholder="Başlangıç" value="01.01.2025">
+                                        <i class="fa-solid fa-calendar"></i>
+                                    </div>
+                                    <span>-</span>
+                                    <div class="input-with-icon">
+                                        <input type="text" class="filter-input" placeholder="Bitiş" value="31.12.2025">
+                                        <i class="fa-solid fa-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label>İşlem Tarihine Göre:</label>
+                                <select class="filter-select">
+                                    <option>Evrak Tarihi</option>
+                                    <option selected>İşlem Tarihi</option>
+                                    <option>Vade Tarihi</option>
+                                </select>
+                            </div>
+                            <div class="filter-group radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="evrakType" value="sonEklenen" checked>
+                                    <span>Son Eklenen</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="evrakType" value="tumu">
+                                    <span>Tüm Evraklar</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-row">
+                            <div class="filter-group evrak-sources-group">
+                                <label>Evrak Kaynakları:</label>
+                                <div class="evrak-sources-horizontal">
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Evraklardan</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Hareketlerden</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Tekliflerden</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Araçlardan</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">YapSatdan</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">İlerlemeden</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Şantiye Defterinden</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Hesap Tanımlarından</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Sadece Sorumlu Olduğum</span>
+                                        </label>
+                                    </div>
+                                    <div class="source-item">
+                                        <label class="source-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                            <span class="source-label">Sadece Eklediklerim</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="data-table-container evrak-table-container">
+                        <table class="data-table evrak-table" id="evrakTable">
+                            <thead>
+                                <tr>
+                                    <th>Ref</th>
+                                    <th>Tipi</th>
+                                    <th>Evrak No</th>
+                                    <th>Şantiye</th>
+                                    <th>H.Tipi</th>
+                                    <th>Hesap Tanımı</th>
+                                    <th>Ekleyen</th>
+                                    <th>Evrak Tarihi</th>
+                                    <th>İşlem Tarihi</th>
+                                    <th>Cinsi</th>
+                                    <th>İlgili Kişi</th>
+                                    <th>Konusu</th>
+                                    <th>Hazırlayan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0001</td>
+                                    <td>ÖRNEK PROJE</td>
+                                    <td>Personel</td>
+                                    <td>FİRMA PERSONELİ</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>15.01.2025</td>
+                                    <td>15.01.2025</td>
+                                    <td>Kimlik</td>
+                                    <td>Ahmet Yılmaz</td>
+                                    <td>KİMLİK FOTOKOPİSİ</td>
+                                    <td>İnsan Kaynakları</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0002</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>Fatura</td>
+                                    <td>ABC İNŞAAT LTD. ŞTİ.</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>16.01.2025</td>
+                                    <td>16.01.2025</td>
+                                    <td>Fatura</td>
+                                    <td>Mehmet Demir</td>
+                                    <td>BETON MALZEME FATURASI</td>
+                                    <td>Muhasebe</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0003</td>
+                                    <td>PROJE 1</td>
+                                    <td>Sözleşme</td>
+                                    <td>XYZ MÜTEAHHİTLİK</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>17.01.2025</td>
+                                    <td>17.01.2025</td>
+                                    <td>Sözleşme</td>
+                                    <td>Fatma Kaya</td>
+                                    <td>TAŞERON SÖZLEŞMESİ</td>
+                                    <td>Hukuk</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0004</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>Teklif</td>
+                                    <td>DEF YAPI MALZEMELERİ</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>18.01.2025</td>
+                                    <td>18.01.2025</td>
+                                    <td>Teklif</td>
+                                    <td>Ali Özkan</td>
+                                    <td>ÇİMENTO TEDARİK TEKLİFİ</td>
+                                    <td>Satın Alma</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0005</td>
+                                    <td>PROJE 2</td>
+                                    <td>İrsaliye</td>
+                                    <td>GHI NAKLİYAT</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>19.01.2025</td>
+                                    <td>19.01.2025</td>
+                                    <td>İrsaliye</td>
+                                    <td>Veli Şahin</td>
+                                    <td>DEMİR TAŞIMA İRSALİYESİ</td>
+                                    <td>Lojistik</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0006</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>Fatura</td>
+                                    <td>JKL ÇELİK SANAYİ</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>20.01.2025</td>
+                                    <td>20.01.2025</td>
+                                    <td>Fatura</td>
+                                    <td>Can Yıldız</td>
+                                    <td>ÇELİK KONSTRÜKSİYON FATURASI</td>
+                                    <td>Mühendislik</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0007</td>
+                                    <td>PROJE 1</td>
+                                    <td>Teklif</td>
+                                    <td>MNO ELEKTRİK</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>21.01.2025</td>
+                                    <td>21.01.2025</td>
+                                    <td>Teklif</td>
+                                    <td>Zeynep Arslan</td>
+                                    <td>ELEKTRİK TESİSATI TEKLİFİ</td>
+                                    <td>Teknik</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0008</td>
+                                    <td>PROJE 2</td>
+                                    <td>Sözleşme</td>
+                                    <td>PQR İZOLASYON</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>22.01.2025</td>
+                                    <td>22.01.2025</td>
+                                    <td>Sözleşme</td>
+                                    <td>Murat Kaya</td>
+                                    <td>İZOLASYON İŞLERİ SÖZLEŞMESİ</td>
+                                    <td>Proje</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0009</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>İrsaliye</td>
+                                    <td>RST BOYA</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>23.01.2025</td>
+                                    <td>23.01.2025</td>
+                                    <td>İrsaliye</td>
+                                    <td>Elif Demir</td>
+                                    <td>BOYA MALZEMESİ İRSALİYESİ</td>
+                                    <td>Satın Alma</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0010</td>
+                                    <td>PROJE 1</td>
+                                    <td>Fatura</td>
+                                    <td>TUV CAM</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>24.01.2025</td>
+                                    <td>24.01.2025</td>
+                                    <td>Fatura</td>
+                                    <td>Burak Özkan</td>
+                                    <td>CAM SİSTEMLERİ FATURASI</td>
+                                    <td>Mimarlık</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0011</td>
+                                    <td>PROJE 2</td>
+                                    <td>Teklif</td>
+                                    <td>VWX ASANSÖR</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>25.01.2025</td>
+                                    <td>25.01.2025</td>
+                                    <td>Teklif</td>
+                                    <td>Deniz Yılmaz</td>
+                                    <td>ASANSÖR SİSTEMİ TEKLİFİ</td>
+                                    <td>Teknik</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0012</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>Sözleşme</td>
+                                    <td>YZA PEYZAJ</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>26.01.2025</td>
+                                    <td>26.01.2025</td>
+                                    <td>Sözleşme</td>
+                                    <td>Gizem Şahin</td>
+                                    <td>PEYZAJ DÜZENLEME SÖZLEŞMESİ</td>
+                                    <td>Mimarlık</td>
+                                </tr>
+                                <tr>
+                                    <td>13</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0013</td>
+                                    <td>PROJE 1</td>
+                                    <td>İrsaliye</td>
+                                    <td>BCD MOBİLYA</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>27.01.2025</td>
+                                    <td>27.01.2025</td>
+                                    <td>İrsaliye</td>
+                                    <td>Kemal Arslan</td>
+                                    <td>OFİS MOBİLYASI İRSALİYESİ</td>
+                                    <td>İç Mimari</td>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td><span class="evrak-type incoming">Gelen</span></td>
+                                    <td>EVR-0014</td>
+                                    <td>PROJE 2</td>
+                                    <td>Fatura</td>
+                                    <td>EFG KLİMA</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>28.01.2025</td>
+                                    <td>28.01.2025</td>
+                                    <td>Fatura</td>
+                                    <td>Serkan Yıldız</td>
+                                    <td>KLİMA SİSTEMİ FATURASI</td>
+                                    <td>Mekanik</td>
+                                </tr>
+                                <tr>
+                                    <td>15</td>
+                                    <td><span class="evrak-type outgoing">Giden</span></td>
+                                    <td>EVR-0015</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>Teklif</td>
+                                    <td>HIJ GÜVENLİK</td>
+                                    <td>Ana Kullanıcı</td>
+                                    <td>29.01.2025</td>
+                                    <td>29.01.2025</td>
+                                    <td>Teklif</td>
+                                    <td>Aslı Kaya</td>
+                                    <td>GÜVENLİK SİSTEMİ TEKLİFİ</td>
+                                    <td>Teknik</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Summary Bar -->
+                        <div class="summary-bar">
+                            <span class="record-count">15 kayıt</span>
+                            <div class="summary-stats">
+                                <span class="stat-item">
+                                    <i class="fa-solid fa-inbox"></i>
+                                    Gelen: 9
+                                </span>
+                                <span class="stat-item">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    Giden: 6
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add custom styles for evrak
+            this.addEvrakStyles();
+            
+            // Initialize evrak functionality
+            this.initEvrakFunctionality();
+            
+            // Initialize table interactions for evrak
+            this.initEvrakTableInteractions();
+        }
+    }
+
     showEFaturaModule() {
         // Hide welcome screen
         this.hideWelcomeScreen();
@@ -697,9 +1172,9 @@ export class ToolbarManager {
         document.title = 'E-Fatura Yönetimi - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>E-Fatura Yönetimi</h2>
                     <div class="header-actions">
@@ -821,6 +1296,116 @@ export class ToolbarManager {
         }
     }
 
+    showRaporlarModule() {
+        // Hide welcome screen
+        this.hideWelcomeScreen();
+        
+        // Update page title
+        document.title = 'Raporlar - İnşaat Muhasebe PRO - NOA YAZILIM';
+        
+        // Update module container instead of main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
+                <div class="content-header">
+                    <h2>Raporlar</h2>
+                    <p class="header-description">Muhasebe ve finansal analiz raporları</p>
+                </div>
+                
+                <div class="reports-grid">
+                    <div class="report-card submenu-item" data-report="hesap-raporu" data-report-id="hesap">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h3>Hesap Raporu</h3>
+                        <p>Genel hesap durumu ve bakiye analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="santiye-raporu" data-report-id="santiye">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-hard-hat"></i>
+                        </div>
+                        <h3>Şantiye Raporu</h3>
+                        <p>Şantiye bazlı maliyet ve hakediş analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="taseron-raporu" data-report-id="taseron">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-user-tie"></i>
+                        </div>
+                        <h3>Taşeron Raporu</h3>
+                        <p>Taşeron performans ve ödeme analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="personel-raporu" data-report-id="personel">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3>Personel Raporu</h3>
+                        <p>Personel çalışma ve maaş analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="tedarikci-raporu" data-report-id="tedarikci">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-truck"></i>
+                        </div>
+                        <h3>Tedarikçi Raporu</h3>
+                        <p>Tedarikçi analiz ve teslimat performansı</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="maas-raporu" data-report-id="maas">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </div>
+                        <h3>Maaş Raporu</h3>
+                        <p>Personel maaş ve kesinti özetleri</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="fatura-raporu" data-report-id="fatura">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-file-invoice"></i>
+                        </div>
+                        <h3>Fatura/İrsaliye Raporu</h3>
+                        <p>Fatura ve irsaliye takip analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="odeme-raporu" data-report-id="odeme">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <h3>Ödeme & Tahsilat Raporu</h3>
+                        <p>Ödeme akışları ve nakit analizi</p>
+                    </div>
+                    
+                    <div class="report-card submenu-item" data-report="kasa-raporu" data-report-id="kasa">
+                        <div class="report-icon">
+                            <i class="fa-solid fa-cash-register"></i>
+                        </div>
+                        <h3>Kasa Raporu</h3>
+                        <p>Kasa durumu ve günlük özet</p>
+                    </div>
+                </div>
+            `;
+            
+            // Add styles
+            this.addRaporlarStyles();
+            
+            // Initialize functionality
+            this.initRaporlarFunctionality();
+            
+            // Re-initialize ReportManager for the new content
+            if (window.reportManager) {
+                // Force re-initialization of report cards
+                setTimeout(() => {
+                    window.reportManager.refresh();
+                    console.log('ReportManager re-initialized for toolbar reports');
+                }, 100);
+            } else {
+                console.log('ReportManager not found in window object');
+            }
+        }
+    }
+
     showYapSatModule() {
         // Hide welcome screen
         this.hideWelcomeScreen();
@@ -829,9 +1414,9 @@ export class ToolbarManager {
         document.title = 'Emlak Satışları - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Emlak Satışları</h2>
                     <div class="header-actions">
@@ -979,9 +1564,9 @@ export class ToolbarManager {
         document.title = 'Şantiye İlerleme & Yaklaşık Maliyet Hareketleri - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Şantiye İlerleme & Yaklaşık Maliyet Hareketleri</h2>
                     <div class="header-actions">
@@ -1238,8 +1823,8 @@ export class ToolbarManager {
         document.title = 'Puantaj Hareketleri - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
             const currentMonth = new Date().getMonth();
             const currentYear = new Date().getFullYear();
             const months = [
@@ -1247,7 +1832,7 @@ export class ToolbarManager {
                 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
             ];
             
-            mainContent.innerHTML = `
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Puantaj Hareketleri</h2>
                     <div class="header-actions">
@@ -2872,9 +3457,9 @@ export class ToolbarManager {
         document.title = 'Puantaj Hareketleri - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
         
         // Update main content with fallback
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Puantaj Hareketleri</h2>
                     <div class="header-actions">
@@ -2929,9 +3514,9 @@ export class ToolbarManager {
         document.title = 'Hakediş Girişi - İnşaat Muhasebe PRO - NOA YAZILIM';
         
         // Update main content
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.innerHTML = `
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
                 <div class="content-header">
                     <h2>Hakediş Girişi</h2>
                     <div class="header-actions">
@@ -4325,9 +4910,4245 @@ export class ToolbarManager {
         const faturaDurumu = document.getElementById('faturaDurumu').value;
         
         console.log('Applying E-Fatura filters:', { startDate, endDate, faturaDurumu });
+    }
+
+    addEvrakStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .evrak-content {
+                display: flex;
+                flex-direction: column;
+                height: calc(100vh - 120px);
+            }
+            
+            .evrak-filters {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border: 1px solid #dee2e6;
+            }
+            
+            .evrak-filters .filter-row {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                min-height: 40px;
+            }
+            
+            .evrak-filters .filter-row:last-child {
+                margin-bottom: 0;
+            }
+            
+            .evrak-filters .filter-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            
+            .evrak-filters .filter-group.radio-group {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                flex-wrap: nowrap;
+            }
+            
+            .evrak-filters .filter-group label {
+                font-weight: 600;
+                color: #495057;
+                min-width: 120px;
+            }
+            
+            .evrak-filters .date-range {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .evrak-filters .input-with-icon {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+            
+            .evrak-filters .input-with-icon input {
+                padding: 8px 30px 8px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                background: white;
+                min-width: 120px;
+                font-size: 14px;
+            }
+            
+            .evrak-filters .input-with-icon i {
+                position: absolute;
+                right: 8px;
+                color: #6c757d;
+                cursor: pointer;
+            }
+            
+            .evrak-filters .filter-select {
+                padding: 8px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                background: white;
+                min-width: 150px;
+                font-size: 14px;
+            }
+            
+            .evrak-filters .filter-input {
+                padding: 8px 12px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                background: white;
+                min-width: 200px;
+                font-size: 14px;
+            }
+            
+            .evrak-filters .filter-input-small {
+                padding: 6px 8px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                background: white;
+                width: 60px;
+                text-align: center;
+                font-size: 14px;
+            }
+            
+            .radio-label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                cursor: pointer;
+                font-weight: normal;
+                margin-right: 20px;
+                vertical-align: middle;
+            }
+            
+            .radio-label input[type="radio"] {
+                margin: 0;
+                vertical-align: middle;
+                position: relative;
+                top: 0;
+            }
+            
+            .radio-label input[type="radio"] + span {
+                vertical-align: middle;
+                line-height: 1.2;
+            }
+            
+            .evrak-sources-group {
+                width: 100%;
+            }
+            
+            .evrak-sources-horizontal {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 10px;
+                padding: 15px;
+                background: white;
+                border: 1px solid #e9ecef;
+                border-radius: 6px;
+                align-items: center;
+            }
+            
+            .source-item {
+                display: flex;
+                align-items: center;
+            }
+            
+            .source-checkbox {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 4px;
+                transition: all 0.2s ease;
+                width: 100%;
+                position: relative;
+            }
+            
+            .source-checkbox:hover {
+                background: #f8f9fa;
+            }
+            
+            .source-checkbox input[type="checkbox"] {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+            
+            .checkmark {
+                height: 18px;
+                width: 18px;
+                background-color: white;
+                border: 2px solid #ced4da;
+                border-radius: 3px;
+                position: relative;
+                flex-shrink: 0;
+                transition: all 0.2s ease;
+            }
+            
+            .source-checkbox:hover .checkmark {
+                border-color: #2e7d32;
+            }
+            
+            .source-checkbox input:checked ~ .checkmark {
+                background-color: #2e7d32;
+                border-color: #2e7d32;
+            }
+            
+            .checkmark:after {
+                content: "";
+                position: absolute;
+                display: none;
+                left: 5px;
+                top: 2px;
+                width: 4px;
+                height: 8px;
+                border: solid white;
+                border-width: 0 2px 2px 0;
+                transform: rotate(45deg);
+            }
+            
+            .source-checkbox input:checked ~ .checkmark:after {
+                display: block;
+            }
+            
+            .source-label {
+                font-size: 13px;
+                font-weight: 500;
+                color: #495057;
+                flex: 1;
+            }
+            
+            .search-box {
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+            
+            .search-box i {
+                position: absolute;
+                left: 12px;
+                color: #6c757d;
+                z-index: 2;
+            }
+            
+            .search-box input {
+                padding-left: 35px;
+                padding-right: 12px;
+                min-width: 250px;
+            }
+            
+            .search-box-header {
+                position: relative;
+                display: flex;
+                align-items: center;
+                margin-right: 15px;
+            }
+            
+            .search-box-header i {
+                position: absolute;
+                left: 12px;
+                color: #6c757d;
+                z-index: 2;
+            }
+            
+            .header-search-input {
+                padding: 8px 12px 8px 35px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                background: white;
+                min-width: 250px;
+                font-size: 14px;
+                transition: border-color 0.2s ease;
+            }
+            
+            .header-search-input:focus {
+                outline: none;
+                border-color: #2e7d32;
+                box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+            }
+            
+            .checkbox-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 5px;
+            }
+            
+            .checkbox-label {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                cursor: pointer;
+                font-weight: normal;
+                font-size: 13px;
+            }
+            
+            .checkbox-label input[type="checkbox"] {
+                margin: 0;
+            }
+            
+            .evrak-table-container {
+                flex: 1;
+                background: white;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                display: flex;
+                flex-direction: column;
+                overflow: auto;
+                max-height: calc(100vh - 400px);
+            }
+            
+            .evrak-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 12px;
+                flex: 1;
+            }
+            
+            .evrak-table th {
+                background: #e9ecef;
+                padding: 12px 8px;
+                text-align: left;
+                border: 1px solid #dee2e6;
+                font-weight: 600;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .evrak-table td {
+                padding: 10px 8px;
+                border: 1px solid #dee2e6;
+                text-align: left;
+                vertical-align: middle;
+            }
+            
+            .evrak-table tbody tr {
+                transition: all 0.2s ease;
+            }
+            
+            .evrak-table tbody tr:hover {
+                background: #f8f9fa;
+            }
+            
+            .evrak-table tbody tr.selected {
+                background: #e8f5e8 !important;
+                color: #2e7d32;
+                font-weight: 600;
+            }
+            
+            .evrak-type {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .evrak-type.incoming {
+                background: #d4edda;
+                color: #155724;
+            }
+            
+            .evrak-type.outgoing {
+                background: #d1ecf1;
+                color: #0c5460;
+            }
+            
+            .summary-bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 20px;
+                background: #f8f9fa;
+                border-top: 1px solid #dee2e6;
+                font-weight: 600;
+                color: #495057;
+            }
+            
+            .record-count {
+                font-size: 14px;
+            }
+            
+            .summary-stats {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .stat-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+            }
+            
+            .stat-item i {
+                font-size: 14px;
+            }
+            
+            /* Column widths */
+            .evrak-table th:nth-child(1) { width: 50px; }   /* Ref */
+            .evrak-table th:nth-child(2) { width: 80px; }   /* Tipi */
+            .evrak-table th:nth-child(3) { width: 100px; }  /* Evrak No */
+            .evrak-table th:nth-child(4) { width: 120px; }  /* Şantiye */
+            .evrak-table th:nth-child(5) { width: 80px; }   /* H.Tipi */
+            .evrak-table th:nth-child(6) { width: 150px; }  /* Hesap Tanımı */
+            .evrak-table th:nth-child(7) { width: 100px; }  /* Ekleyen */
+            .evrak-table th:nth-child(8) { width: 90px; }   /* Evrak Tarihi */
+            .evrak-table th:nth-child(9) { width: 90px; }   /* İşlem Tarihi */
+            .evrak-table th:nth-child(10) { width: 80px; }  /* Cinsi */
+            .evrak-table th:nth-child(11) { width: 120px; } /* İlgili Kişi */
+            .evrak-table th:nth-child(12) { width: 200px; } /* Konusu */
+            .evrak-table th:nth-child(13) { width: 100px; } /* Hazırlayan */
+            
+            /* Scrollbar styles for evrak table */
+            .evrak-table-container::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+            
+            .evrak-table-container::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 4px;
+            }
+            
+            .evrak-table-container::-webkit-scrollbar-thumb {
+                background: #c1c1c1;
+                border-radius: 4px;
+            }
+            
+            .evrak-table-container::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    initEvrakFunctionality() {
+        this.initEvrakFilters();
+        this.initEvrakTableInteractions();
+    }
+
+    initEvrakFilters() {
+        // Date inputs
+        const dateInputs = document.querySelectorAll('.evrak-filters .input-with-icon input');
+        dateInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this.applyEvrakFilters();
+            });
+        });
+
+        // Radio buttons
+        const radioButtons = document.querySelectorAll('input[name="evrakType"]');
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', () => {
+                this.applyEvrakFilters();
+            });
+        });
+
+        // Evrak source checkboxes
+        const sourceCheckboxes = document.querySelectorAll('.source-checkbox input[type="checkbox"]');
+        sourceCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                this.applyEvrakFilters();
+                this.updateSourceCheckboxStyle(checkbox);
+            });
+        });
+
+        // Other checkboxes
+        const otherCheckboxes = document.querySelectorAll('.evrak-filters input[type="checkbox"]:not(.source-checkbox input)');
+        otherCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                this.applyEvrakFilters();
+            });
+        });
+
+
+
+        // Select dropdowns
+        const selects = document.querySelectorAll('.evrak-filters .filter-select');
+        selects.forEach(select => {
+            select.addEventListener('change', () => {
+                this.applyEvrakFilters();
+            });
+        });
+
+        // Initialize source checkbox styles
+        sourceCheckboxes.forEach(checkbox => {
+            this.updateSourceCheckboxStyle(checkbox);
+        });
+    }
+
+    updateSourceCheckboxStyle(checkbox) {
+        const sourceItem = checkbox.closest('.source-item');
+        if (checkbox.checked) {
+            sourceItem.style.opacity = '1';
+            sourceItem.style.fontWeight = '600';
+        } else {
+            sourceItem.style.opacity = '0.6';
+            sourceItem.style.fontWeight = 'normal';
+        }
+    }
+
+    applyEvrakFilters() {
+        const startDate = document.querySelector('.evrak-filters .date-range input:first-child').value;
+        const endDate = document.querySelector('.evrak-filters .date-range input:last-child').value;
+        const evrakType = document.querySelector('input[name="evrakType"]:checked').value;
+        
+        console.log('Applying evrak filters:', { startDate, endDate, evrakType });
         
         // Here you would typically make an API call to filter data
         // For now, just log the filter values
     }
 
+    initEvrakTableInteractions() {
+        // Use setTimeout to ensure DOM is fully rendered
+        setTimeout(() => {
+            const tableCells = document.querySelectorAll('.evrak-table tbody td');
+            
+            tableCells.forEach(cell => {
+                cell.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Check if cell is already in edit mode
+                    if (cell.querySelector('input')) {
+                        return;
+                    }
+                    
+                    // Remove selected class from all cells
+                    tableCells.forEach(c => c.classList.remove('selected'));
+                    
+                    // Add selected class to clicked cell
+                    cell.classList.add('selected');
+                    
+                    // Make cell editable immediately
+                    this.makeCellEditable(cell);
+                    
+                    console.log('Evrak cell selected and made editable:', cell.textContent);
+                });
+            });
+
+            // Make table headers sortable
+            const headers = document.querySelectorAll('.evrak-table th');
+            headers.forEach(header => {
+                header.addEventListener('click', () => {
+                    this.sortEvrakTable(header);
+                });
+                header.style.cursor = 'pointer';
+            });
+        }, 100);
+    }
+
+    sortEvrakTable(header) {
+        const column = header.cellIndex;
+        const table = document.querySelector('#evrakTable');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        // Remove sort indicators from all headers
+        document.querySelectorAll('.evrak-table th').forEach(h => {
+            h.classList.remove('sort-asc', 'sort-desc');
+        });
+        
+        // Add sort indicator to clicked header
+        if (header.classList.contains('sort-asc')) {
+            header.classList.remove('sort-asc');
+            header.classList.add('sort-desc');
+        } else {
+            header.classList.remove('sort-desc');
+            header.classList.add('sort-asc');
+        }
+        
+        console.log('Sorting evrak column:', column);
+    }
+
+    addRaporlarStyles() {
+        const style = document.createElement('style');
+        style.textContent = `
+            .header-description {
+                color: #6b7280;
+                font-size: 14px;
+                margin-top: 4px;
+            }
+
+            .reports-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 24px;
+                margin-top: 32px;
+            }
+
+            .report-card {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 24px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .report-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                border-color: #2e7d32;
+            }
+
+            .report-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, #2e7d32, #4caf50);
+            }
+
+            .report-icon {
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 16px;
+            }
+
+            .report-icon i {
+                font-size: 28px;
+                color: #2e7d32;
+            }
+
+            .report-card h3 {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1f2937;
+                margin: 0 0 8px 0;
+            }
+
+            .report-card p {
+                color: #6b7280;
+                font-size: 14px;
+                line-height: 1.5;
+                margin: 0;
+            }
+
+            /* Report Detail Page Styles */
+            .report-detail {
+                display: none;
+            }
+
+            .report-detail.active {
+                display: block;
+            }
+
+            .breadcrumb {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 24px;
+                font-size: 14px;
+                color: #6b7280;
+            }
+
+            .breadcrumb a {
+                color: #2e7d32;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
+            .breadcrumb .separator {
+                color: #d1d5db;
+            }
+
+            .report-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+            }
+
+            .report-title {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .report-title-icon {
+                width: 48px;
+                height: 48px;
+                background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .report-title-icon i {
+                font-size: 24px;
+                color: #2e7d32;
+            }
+
+            .report-title h1 {
+                font-size: 24px;
+                font-weight: 600;
+                color: #1f2937;
+                margin: 0;
+            }
+
+            .report-title p {
+                color: #6b7280;
+                font-size: 14px;
+                margin: 4px 0 0 0;
+            }
+
+            .report-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .filter-bar {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 24px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .filter-row {
+                display: flex;
+                gap: 16px;
+                align-items: flex-end;
+                flex-wrap: wrap;
+            }
+
+            .filter-group {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                min-width: 200px;
+            }
+
+            .filter-group label {
+                font-size: 12px;
+                font-weight: 500;
+                color: #374151;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .filter-input, .filter-select {
+                padding: 8px 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 14px;
+                transition: border-color 0.2s ease;
+            }
+
+            .filter-input:focus, .filter-select:focus {
+                outline: none;
+                border-color: #2e7d32;
+            }
+
+            .filter-actions {
+                display: flex;
+                gap: 8px;
+                align-items: flex-end;
+            }
+
+            .kpi-strip {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .kpi-card {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                padding: 20px;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .kpi-card:hover {
+                border-color: #2e7d32;
+                transform: translateY(-2px);
+            }
+
+            .kpi-card.positive {
+                border-left: 4px solid #10b981;
+            }
+
+            .kpi-card.negative {
+                border-left: 4px solid #ef4444;
+            }
+
+            .kpi-card.neutral {
+                border-left: 4px solid #6b7280;
+            }
+
+            .kpi-value {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 4px;
+            }
+
+            .kpi-label {
+                font-size: 12px;
+                color: #6b7280;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 8px;
+            }
+
+            .kpi-change {
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .kpi-change.positive {
+                color: #10b981;
+            }
+
+            .kpi-change.negative {
+                color: #ef4444;
+            }
+
+            .kpi-change.neutral {
+                color: #6b7280;
+            }
+
+            .report-tabs {
+                display: flex;
+                border-bottom: 1px solid #e5e7eb;
+                margin-bottom: 24px;
+            }
+
+            .report-tab {
+                padding: 12px 24px;
+                border: none;
+                background: none;
+                color: #6b7280;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s ease;
+            }
+
+            .report-tab.active {
+                color: #2e7d32;
+                border-bottom-color: #2e7d32;
+            }
+
+            .report-tab:hover {
+                color: #2e7d32;
+            }
+
+            .report-content {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                min-height: 400px;
+            }
+
+            .report-tab-content {
+                display: none;
+            }
+
+            .report-tab-content.active {
+                display: block;
+            }
+
+            .summary-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 16px;
+                padding: 24px;
+            }
+
+            .summary-card {
+                background: #f9fafb;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px;
+                padding: 16px;
+            }
+
+            .summary-card h4 {
+                font-size: 14px;
+                font-weight: 600;
+                color: #374151;
+                margin: 0 0 8px 0;
+            }
+
+            .summary-value {
+                font-size: 20px;
+                font-weight: 700;
+                color: #2e7d32;
+            }
+
+            .chart-container {
+                padding: 24px;
+                text-align: center;
+            }
+
+            .chart-placeholder {
+                width: 100%;
+                height: 300px;
+                background: #f9fafb;
+                border: 2px dashed #d1d5db;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #6b7280;
+                font-size: 16px;
+            }
+
+            .detail-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .detail-table th,
+            .detail-table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .detail-table th {
+                background: #f9fafb;
+                font-weight: 600;
+                color: #374151;
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .detail-table tbody tr:hover {
+                background: #f9fafb;
+            }
+
+            .pivot-container {
+                padding: 24px;
+            }
+
+            .pivot-fields {
+                display: flex;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .pivot-field {
+                flex: 1;
+            }
+
+            .pivot-field label {
+                display: block;
+                font-size: 12px;
+                font-weight: 500;
+                color: #374151;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .pivot-field select {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #d1d5db;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
+            .log-container {
+                padding: 24px;
+            }
+
+            .log-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .log-info {
+                flex: 1;
+            }
+
+            .log-date {
+                font-size: 12px;
+                color: #6b7280;
+            }
+
+            .log-action {
+                font-size: 14px;
+                color: #374151;
+                font-weight: 500;
+            }
+
+            .log-filters {
+                font-size: 12px;
+                color: #6b7280;
+                margin-top: 4px;
+            }
+
+            .sticky-footer {
+                position: sticky;
+                bottom: 0;
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                padding: 16px 24px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                font-weight: 500;
+                color: #374151;
+            }
+
+            .footer-totals {
+                display: flex;
+                gap: 24px;
+            }
+
+            .footer-total {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .footer-total-value {
+                font-weight: 700;
+                color: #2e7d32;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .reports-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+
+                .report-card {
+                    padding: 16px;
+                }
+
+                .filter-row {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .filter-group {
+                    min-width: auto;
+                }
+
+                .kpi-strip {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .report-tabs {
+                    overflow-x: auto;
+                }
+
+                .report-tab {
+                    white-space: nowrap;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    initRaporlarFunctionality() {
+        const reportCards = document.querySelectorAll('.report-card');
+        
+        reportCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const reportType = card.getAttribute('data-report');
+                this.showReportDetail(reportType);
+            });
+        });
+    }
+
+    showReportDetail(reportType) {
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        const reportData = this.getReportData(reportType);
+        
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
+                <div class="breadcrumb">
+                    <a onclick="toolbarManager.goBackToReports()">Raporlar</a>
+                    <span class="separator">/</span>
+                    <span>${reportData.title}</span>
+                </div>
+
+                <div class="report-header">
+                    <div class="report-title">
+                        <div class="report-title-icon">
+                            <i class="${reportData.icon}"></i>
+                        </div>
+                        <div>
+                            <h1>${reportData.title}</h1>
+                            <p>${reportData.description}</p>
+                        </div>
+                    </div>
+                    <div class="report-actions">
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-save"></i>
+                            Kaydet
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-share"></i>
+                            Paylaş
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-print"></i>
+                            Yazdır
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-download"></i>
+                            Dışa Aktar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Tarih Aralığı</label>
+                            <select class="filter-select">
+                                <option>Bugün</option>
+                                <option selected>Bu Ay</option>
+                                <option>Son 3 Ay</option>
+                                <option>Bu Yıl</option>
+                                <option>Özel</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Arama</label>
+                            <input type="text" class="filter-input" placeholder="Cari, şantiye, taşeron...">
+                        </div>
+                        <div class="filter-group">
+                            <label>Şantiye</label>
+                            <select class="filter-select">
+                                <option>Tümü</option>
+                                <option>LONICERA OTEL</option>
+                                <option>PROJE 1</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Durum</label>
+                            <select class="filter-select">
+                                <option>Tümü</option>
+                                <option>Aktif</option>
+                                <option>Pasif</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-primary">
+                                <i class="fa-solid fa-search"></i>
+                                Filtrele
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fa-solid fa-cog"></i>
+                                Gelişmiş
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-strip">
+                    ${reportData.kpis.map(kpi => `
+                        <div class="kpi-card ${kpi.trend}">
+                            <div class="kpi-value">${kpi.value}</div>
+                            <div class="kpi-label">${kpi.label}</div>
+                            <div class="kpi-change ${kpi.trend}">
+                                ${kpi.change > 0 ? '+' : ''}${kpi.change}% önceki dönem
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="report-tabs">
+                    <button class="report-tab active" data-tab="ozet">Özet</button>
+                    <button class="report-tab" data-tab="grafikler">Grafikler</button>
+                    <button class="report-tab" data-tab="detay">Detay</button>
+                    <button class="report-tab" data-tab="pivot">Pivot</button>
+                    <button class="report-tab" data-tab="log">Log</button>
+                </div>
+
+                <div class="report-content">
+                    <div class="report-tab-content active" id="ozet">
+                        ${this.getSummaryContent(reportType)}
+                    </div>
+                    <div class="report-tab-content" id="grafikler">
+                        <div class="chart-container">
+                            <div class="chart-placeholder">
+                                <i class="fa-solid fa-chart-bar"></i> Grafikler burada görüntülenecek
+                            </div>
+                        </div>
+                    </div>
+                    <div class="report-tab-content" id="detay">
+                        ${this.getDetailContent(reportType)}
+                    </div>
+                    <div class="report-tab-content" id="pivot">
+                        ${this.getPivotContent(reportType)}
+                    </div>
+                    <div class="report-tab-content" id="log">
+                        ${this.getLogContent(reportType)}
+                    </div>
+                </div>
+
+                <div class="sticky-footer">
+                    <div class="footer-totals">
+                        <div class="footer-total">
+                            <span>Toplam:</span>
+                            <span class="footer-total-value">${reportData.footer.total}</span>
+                        </div>
+                        <div class="footer-total">
+                            <span>Ortalama:</span>
+                            <span class="footer-total-value">${reportData.footer.average}</span>
+                        </div>
+                        <div class="footer-total">
+                            <span>Adet:</span>
+                            <span class="footer-total-value">${reportData.footer.count}</span>
+                        </div>
+                    </div>
+                    <div class="footer-actions">
+                        <button class="btn btn-outline btn-sm">
+                            <i class="fa-solid fa-refresh"></i>
+                            Yenile
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            this.initReportDetailFunctionality();
+        }
+    }
+
+    getReportData(reportType) {
+        const reportData = {
+            hesap: {
+                title: 'Hesap Raporu',
+                description: 'Genel hesap durumu ve bakiye analizi',
+                icon: 'fa-solid fa-coins',
+                kpis: [
+                    { label: 'Toplam Bakiye', value: '2,450,000 ₺', change: 12.5, trend: 'positive' },
+                    { label: 'Toplam Giriş', value: '1,850,000 ₺', change: 8.3, trend: 'positive' },
+                    { label: 'Toplam Çıkış', value: '1,200,000 ₺', change: -5.2, trend: 'negative' },
+                    { label: 'Net Değişim', value: '650,000 ₺', change: 15.7, trend: 'positive' },
+                    { label: 'İşlem Sayısı', value: '1,247', change: 3.1, trend: 'neutral' }
+                ],
+                footer: { total: '2,450,000 ₺', average: '245,000 ₺', count: '10' }
+            },
+            santiye: {
+                title: 'Şantiye Raporu',
+                description: 'Şantiye bazlı maliyet ve hakediş analizi',
+                icon: 'fa-solid fa-hard-hat',
+                kpis: [
+                    { label: 'Bütçe', value: '15,000,000 ₺', change: 0, trend: 'neutral' },
+                    { label: 'Gerçekleşen', value: '12,450,000 ₺', change: 8.5, trend: 'positive' },
+                    { label: 'Sapma', value: '2,550,000 ₺', change: -15.2, trend: 'negative' },
+                    { label: 'Hakediş Toplamı', value: '14,200,000 ₺', change: 12.3, trend: 'positive' },
+                    { label: 'Aktif Şantiye', value: '8', change: 0, trend: 'neutral' }
+                ],
+                footer: { total: '12,450,000 ₺', average: '1,556,250 ₺', count: '8' }
+            },
+            taseron: {
+                title: 'Taşeron Raporu',
+                description: 'Taşeron performans ve ödeme analizi',
+                icon: 'fa-solid fa-user-tie',
+                kpis: [
+                    { label: 'Sözleşme Tutarı', value: '8,500,000 ₺', change: 5.2, trend: 'positive' },
+                    { label: 'Ödenen', value: '6,200,000 ₺', change: 12.8, trend: 'positive' },
+                    { label: 'Kalan', value: '2,300,000 ₺', change: -8.5, trend: 'negative' },
+                    { label: 'Ortalama Vade', value: '45 gün', change: -5.1, trend: 'positive' },
+                    { label: 'Gecikme Sayısı', value: '3', change: -25.0, trend: 'positive' }
+                ],
+                footer: { total: '8,500,000 ₺', average: '850,000 ₺', count: '10' }
+            },
+            personel: {
+                title: 'Personel Raporu',
+                description: 'Personel çalışma ve maaş analizi',
+                icon: 'fa-solid fa-users',
+                kpis: [
+                    { label: 'Personel Sayısı', value: '45', change: 2.2, trend: 'positive' },
+                    { label: 'Toplam Saat', value: '7,650', change: 8.7, trend: 'positive' },
+                    { label: 'Fazla Mesai', value: '320 saat', change: -12.5, trend: 'positive' },
+                    { label: 'Net Maaş', value: '1,250,000 ₺', change: 6.8, trend: 'positive' },
+                    { label: 'Avanslar', value: '85,000 ₺', change: -8.2, trend: 'negative' }
+                ],
+                footer: { total: '1,250,000 ₺', average: '27,778 ₺', count: '45' }
+            },
+            tedarikci: {
+                title: 'Tedarikçi Raporu',
+                description: 'Tedarikçi analiz ve teslimat performansı',
+                icon: 'fa-solid fa-truck',
+                kpis: [
+                    { label: 'Sipariş Sayısı', value: '156', change: 15.3, trend: 'positive' },
+                    { label: 'Teslim Oranı', value: '94.2%', change: 2.1, trend: 'positive' },
+                    { label: 'İptal/İade', value: '8', change: -20.0, trend: 'positive' },
+                    { label: 'Toplam Tutar', value: '3,850,000 ₺', change: 18.7, trend: 'positive' },
+                    { label: 'Ortalama Vade', value: '30 gün', change: -8.3, trend: 'positive' }
+                ],
+                footer: { total: '3,850,000 ₺', average: '24,679 ₺', count: '156' }
+            },
+            maas: {
+                title: 'Maaş Raporu',
+                description: 'Personel maaş ve kesinti özetleri',
+                icon: 'fa-solid fa-money-bill-wave',
+                kpis: [
+                    { label: 'Brüt', value: '1,850,000 ₺', change: 7.2, trend: 'positive' },
+                    { label: 'Net', value: '1,250,000 ₺', change: 6.8, trend: 'positive' },
+                    { label: 'SGK İşveren', value: '320,000 ₺', change: 8.1, trend: 'positive' },
+                    { label: 'Vergi', value: '280,000 ₺', change: 5.9, trend: 'positive' },
+                    { label: 'Kişi Başına Ort.', value: '27,778 ₺', change: 4.5, trend: 'positive' }
+                ],
+                footer: { total: '1,250,000 ₺', average: '27,778 ₺', count: '45' }
+            },
+            fatura: {
+                title: 'Fatura/İrsaliye Raporu',
+                description: 'Fatura ve irsaliye takip analizi',
+                icon: 'fa-solid fa-file-invoice',
+                kpis: [
+                    { label: 'Fatura Adedi', value: '1,247', change: 12.5, trend: 'positive' },
+                    { label: 'Toplam Tutar', value: '8,450,000 ₺', change: 18.7, trend: 'positive' },
+                    { label: 'Ödenmemiş', value: '2,150,000 ₺', change: -8.3, trend: 'positive' },
+                    { label: 'Geciken', value: '450,000 ₺', change: -15.2, trend: 'positive' },
+                    { label: 'Ortalama DSO', value: '32 gün', change: -12.5, trend: 'positive' }
+                ],
+                footer: { total: '8,450,000 ₺', average: '6,780 ₺', count: '1,247' }
+            },
+            odeme: {
+                title: 'Ödeme & Tahsilat Raporu',
+                description: 'Ödeme akışları ve nakit analizi',
+                icon: 'fa-solid fa-credit-card',
+                kpis: [
+                    { label: 'Toplam Tahsilat', value: '6,200,000 ₺', change: 15.3, trend: 'positive' },
+                    { label: 'Toplam Ödeme', value: '4,850,000 ₺', change: 12.8, trend: 'positive' },
+                    { label: 'Net Nakit Akışı', value: '1,350,000 ₺', change: 25.7, trend: 'positive' },
+                    { label: 'Ortalama Vade', value: '28 gün', change: -8.5, trend: 'positive' },
+                    { label: 'Gecikme Oranı', value: '3.2%', change: -15.8, trend: 'positive' }
+                ],
+                footer: { total: '11,050,000 ₺', average: '552,500 ₺', count: '20' }
+            },
+            kasa: {
+                title: 'Kasa Raporu',
+                description: 'Kasa durumu ve günlük özet',
+                icon: 'fa-solid fa-cash-register',
+                kpis: [
+                    { label: 'Başlangıç', value: '850,000 ₺', change: 0, trend: 'neutral' },
+                    { label: 'Giriş', value: '2,450,000 ₺', change: 18.7, trend: 'positive' },
+                    { label: 'Çıkış', value: '1,850,000 ₺', change: 12.3, trend: 'positive' },
+                    { label: 'Gün Sonu', value: '1,450,000 ₺', change: 25.8, trend: 'positive' },
+                    { label: 'Gün Sayısı', value: '31', change: 0, trend: 'neutral' }
+                ],
+                footer: { total: '1,450,000 ₺', average: '46,774 ₺', count: '31' }
+            }
+        };
+        
+        return reportData[reportType] || reportData.hesap;
+    }
+
+    getSummaryContent(reportType) {
+        const summaryData = {
+            hesap: `
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h4>Nakit Hesaplar</h4>
+                        <div class="summary-value">1,250,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Alacak Hesaplar</h4>
+                        <div class="summary-value">850,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Borç Hesaplar</h4>
+                        <div class="summary-value">350,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Net Durum</h4>
+                        <div class="summary-value">1,750,000 ₺</div>
+                    </div>
+                </div>
+            `,
+            santiye: `
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h4>LONICERA OTEL</h4>
+                        <div class="summary-value">8,500,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>PROJE 1</h4>
+                        <div class="summary-value">3,200,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>PROJE 2</h4>
+                        <div class="summary-value">750,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Toplam</h4>
+                        <div class="summary-value">12,450,000 ₺</div>
+                    </div>
+                </div>
+            `,
+            taseron: `
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h4>Ahmet Yılmaz İnşaat</h4>
+                        <div class="summary-value">2,500,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Mehmet Kaya Yapı</h4>
+                        <div class="summary-value">1,800,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Fatma Demir İnşaat</h4>
+                        <div class="summary-value">1,200,000 ₺</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Toplam</h4>
+                        <div class="summary-value">5,500,000 ₺</div>
+                    </div>
+                </div>
+            `
+        };
+        
+        return summaryData[reportType] || summaryData.hesap;
+    }
+
+    getDetailContent(reportType) {
+        const detailData = {
+            hesap: `
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Hesap</th>
+                            <th>Açıklama</th>
+                            <th>Belge No</th>
+                            <th>Giriş</th>
+                            <th>Çıkış</th>
+                            <th>Bakiye</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15.01.2024</td>
+                            <td>100 KASA</td>
+                            <td>Müşteri ödemesi</td>
+                            <td>FAT-001</td>
+                            <td>50,000 ₺</td>
+                            <td>-</td>
+                            <td>1,300,000 ₺</td>
+                        </tr>
+                        <tr>
+                            <td>16.01.2024</td>
+                            <td>120 ALICAKLAR</td>
+                            <td>Mal satışı</td>
+                            <td>FAT-002</td>
+                            <td>75,000 ₺</td>
+                            <td>-</td>
+                            <td>925,000 ₺</td>
+                        </tr>
+                        <tr>
+                            <td>17.01.2024</td>
+                            <td>320 SATICILAR</td>
+                            <td>Mal alımı</td>
+                            <td>FAT-003</td>
+                            <td>-</td>
+                            <td>25,000 ₺</td>
+                            <td>325,000 ₺</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `,
+            santiye: `
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Şantiye</th>
+                            <th>Taşeron</th>
+                            <th>Malzeme/Hizmet</th>
+                            <th>Miktar</th>
+                            <th>Tutar</th>
+                            <th>Hakediş No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15.01.2024</td>
+                            <td>LONICERA OTEL</td>
+                            <td>Ahmet Yılmaz</td>
+                            <td>Beton dökümü</td>
+                            <td>500 m³</td>
+                            <td>250,000 ₺</td>
+                            <td>HK-001</td>
+                        </tr>
+                        <tr>
+                            <td>16.01.2024</td>
+                            <td>LONICERA OTEL</td>
+                            <td>Mehmet Kaya</td>
+                            <td>Demir montajı</td>
+                            <td>50 ton</td>
+                            <td>180,000 ₺</td>
+                            <td>HK-002</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `
+        };
+        
+        return detailData[reportType] || detailData.hesap;
+    }
+
+    getPivotContent(reportType) {
+        return `
+            <div class="pivot-container">
+                <div class="pivot-fields">
+                    <div class="pivot-field">
+                        <label>Satır Alanları</label>
+                        <select>
+                            <option>Şantiye</option>
+                            <option>Taşeron</option>
+                            <option>Hesap</option>
+                        </select>
+                    </div>
+                    <div class="pivot-field">
+                        <label>Sütun Alanları</label>
+                        <select>
+                            <option>Ay</option>
+                            <option>Çeyrek</option>
+                            <option>Yıl</option>
+                        </select>
+                    </div>
+                    <div class="pivot-field">
+                        <label>Değer</label>
+                        <select>
+                            <option>Tutar: Toplam</option>
+                            <option>Tutar: Ortalama</option>
+                            <option>Adet</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-placeholder">
+                    <i class="fa-solid fa-table"></i> Pivot tablo burada görüntülenecek
+                </div>
+            </div>
+        `;
+    }
+
+    getLogContent(reportType) {
+        return `
+            <div class="log-container">
+                <div class="log-item">
+                    <div class="log-info">
+                        <div class="log-date">15.01.2024 14:30</div>
+                        <div class="log-action">Rapor dışa aktarıldı (Excel)</div>
+                        <div class="log-filters">Filtreler: Bu Ay, Tüm Şantiyeler</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-info">
+                        <div class="log-date">14.01.2024 11:15</div>
+                        <div class="log-action">Rapor yazdırıldı</div>
+                        <div class="log-filters">Filtreler: Son 3 Ay, LONICERA OTEL</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-info">
+                        <div class="log-date">13.01.2024 16:45</div>
+                        <div class="log-action">Filtre preset kaydedildi</div>
+                        <div class="log-filters">Preset: "Aylık Özet"</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    initReportDetailFunctionality() {
+        // Tab functionality
+        const tabs = document.querySelectorAll('.report-tab');
+        const tabContents = document.querySelectorAll('.report-tab-content');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const targetContent = document.getElementById(targetTab);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            });
+        });
+
+        // KPI card click functionality
+        const kpiCards = document.querySelectorAll('.kpi-card');
+        kpiCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Highlight corresponding data in detail tab
+                const detailTab = document.querySelector('[data-tab="detay"]');
+                if (detailTab) {
+                    detailTab.click();
+                }
+            });
+        });
+    }
+
+    goBackToReports() {
+        this.showRaporlarModule();
+    }
+
+    showAraclarModule() {
+        // Hide welcome screen
+        this.hideWelcomeScreen();
+        
+        // Update page title
+        document.title = 'Araç/İş Makinası Listesi - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
+        
+        // Update main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
+                <div class="content-header">
+                    <h2>Araç/İş Makinası Listesi</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary">
+                            <i class="fa-solid fa-plus"></i>
+                            Yeni
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-edit"></i>
+                            Düzelt
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-trash"></i>
+                            Sil
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-refresh"></i>
+                            Yenile
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excele Aktar
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-ellipsis-v"></i>
+                            Detay
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-print"></i>
+                            Yazdır
+                        </button>
+                        <button class="btn btn-outline">
+                            <i class="fa-solid fa-times"></i>
+                            Çıkış
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-body arac-content">
+                    <!-- Data Table -->
+                    <div class="data-table-container arac-table-container">
+                        <table class="data-table arac-table" id="aracTable">
+                            <thead>
+                                <tr>
+                                    <th>Plaka</th>
+                                    <th>C/H Bağlantısı</th>
+                                    <th>Kullanıldığı Şantiye</th>
+                                    <th>Şöförü</th>
+                                    <th>Marka</th>
+                                    <th>Model</th>
+                                    <th>Şase No</th>
+                                    <th>Motor No</th>
+                                    <th>Yakıt</th>
+                                    <th>Durumu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>07 NOA 34</td>
+                                    <td>-</td>
+                                    <td>ŞİRKET MERKEZ ŞANTİ</td>
+                                    <td>EVREN YAMAN</td>
+                                    <td>TOYOTA</td>
+                                    <td>COROLLA</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>Benzin</td>
+                                    <td><span class="status-badge active">Aktif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>34 ABC 123</td>
+                                    <td>CH-001</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>MEHMET DEMİR</td>
+                                    <td>FORD</td>
+                                    <td>TRANSIT</td>
+                                    <td>WDF123456789</td>
+                                    <td>ENG987654321</td>
+                                    <td>Dizel</td>
+                                    <td><span class="status-badge active">Aktif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>06 XYZ 789</td>
+                                    <td>CH-002</td>
+                                    <td>PROJE 1</td>
+                                    <td>ALİ ÖZKAN</td>
+                                    <td>VOLVO</td>
+                                    <td>EXCAVATOR</td>
+                                    <td>VOL456789123</td>
+                                    <td>ENG123456789</td>
+                                    <td>Dizel</td>
+                                    <td><span class="status-badge maintenance">Bakımda</span></td>
+                                </tr>
+                                <tr>
+                                    <td>35 DEF 456</td>
+                                    <td>-</td>
+                                    <td>PROJE 2</td>
+                                    <td>FATMA KAYA</td>
+                                    <td>BMW</td>
+                                    <td>X5</td>
+                                    <td>BMW789123456</td>
+                                    <td>ENG456789123</td>
+                                    <td>Benzin</td>
+                                    <td><span class="status-badge inactive">Pasif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>07 GHI 789</td>
+                                    <td>CH-003</td>
+                                    <td>ŞİRKET MERKEZ ŞANTİ</td>
+                                    <td>VELİ ŞAHİN</td>
+                                    <td>CATERPILLAR</td>
+                                    <td>BULLDOZER</td>
+                                    <td>CAT123789456</td>
+                                    <td>ENG789456123</td>
+                                    <td>Dizel</td>
+                                    <td><span class="status-badge active">Aktif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>34 JKL 012</td>
+                                    <td>-</td>
+                                    <td>LONICERA OTEL</td>
+                                    <td>CAN YILDIZ</td>
+                                    <td>MERCEDES</td>
+                                    <td>SPRINTER</td>
+                                    <td>MER456012789</td>
+                                    <td>ENG012789456</td>
+                                    <td>Dizel</td>
+                                    <td><span class="status-badge active">Aktif</span></td>
+                                </tr>
+                                <tr>
+                                    <td>06 MNO 345</td>
+                                    <td>CH-004</td>
+                                    <td>PROJE 1</td>
+                                    <td>AYŞE YILMAZ</td>
+                                    <td>KOMATSU</td>
+                                    <td>EXCAVATOR</td>
+                                    <td>KOM789345012</td>
+                                    <td>ENG345012789</td>
+                                    <td>Dizel</td>
+                                    <td><span class="status-badge maintenance">Bakımda</span></td>
+                                </tr>
+                                <tr>
+                                    <td>35 PQR 678</td>
+                                    <td>-</td>
+                                    <td>PROJE 2</td>
+                                    <td>OSMAN KAYA</td>
+                                    <td>HONDA</td>
+                                    <td>CIVIC</td>
+                                    <td>HON012678345</td>
+                                    <td>ENG678345012</td>
+                                    <td>Benzin</td>
+                                    <td><span class="status-badge active">Aktif</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Add specific styles for arac module
+        this.addAracStyles();
+        
+        // Initialize arac functionality
+        this.initAracFunctionality();
+    }
+
+    addAracStyles() {
+        // Add specific styles for arac module if not already present
+        if (!document.getElementById('arac-styles')) {
+            const style = document.createElement('style');
+            style.id = 'arac-styles';
+            style.textContent = `
+                .arac-content {
+                    padding: 20px;
+                    height: calc(100vh - 200px);
+                }
+                
+                .arac-filters {
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                }
+                
+                .arac-table-container {
+                    height: 100%;
+                    overflow: auto;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: var(--white);
+                    box-shadow: var(--shadow);
+                    max-height: calc(100vh - 400px);
+                }
+                
+                .arac-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                
+                .arac-table th {
+                    background-color: var(--gray-100);
+                    padding: 12px 16px;
+                    text-align: left;
+                    font-weight: 600;
+                    color: var(--text);
+                    border-bottom: 1px solid var(--border);
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                }
+                
+                .arac-table td {
+                    padding: 12px 16px;
+                    border-bottom: 1px solid var(--border);
+                    color: var(--text);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    position: relative;
+                }
+                
+                .arac-table tbody tr:hover {
+                    background-color: var(--gray-50);
+                }
+                
+                /* Hücre seçimi için yeşil border */
+                .arac-table td.selected {
+                    border: 2px solid var(--green) !important;
+                    background-color: #f8fff8 !important;
+                    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+                    z-index: 5;
+                    position: relative;
+                }
+                
+                .arac-table td.selected:hover {
+                    background-color: #f0f8f0 !important;
+                }
+                
+                /* Hücreye tıklandığında aktif durum */
+                .arac-table td.active {
+                    border: 2px solid var(--green) !important;
+                    background-color: #f8fff8 !important;
+                    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.2);
+                    outline: none;
+                }
+                
+                /* Hücre focus durumu */
+                .arac-table td:focus {
+                    outline: none;
+                    border: 2px solid var(--green) !important;
+                    background-color: #f8fff8 !important;
+                    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+                }
+                
+                /* Text selection styles */
+                .arac-table td::selection {
+                    background-color:rgb(141, 186, 231);
+                    color: white;
+                }
+                
+                .arac-table td::-moz-selection {
+                    background-color:rgb(136, 184, 232);
+                    color: white;
+                }
+                
+                /* Cursor styles for better UX */
+                .arac-table td.editable-cell {
+                    cursor: text;
+                }
+                
+                .arac-table td.editable-cell:hover {
+                    background-color: #f0f8ff;
+                }
+                
+                .editable-cell {
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .editable-cell:hover {
+                    background-color: #f0f8f0;
+                }
+                
+                .editable-cell:focus {
+                    outline: 2px solid var(--green);
+                    outline-offset: -2px;
+                    background-color: #f8fff8;
+                    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+                }
+                
+                .cell-focused {
+                    outline: 2px solid var(--green);
+                    outline-offset: -2px;
+                    background-color: #f8fff8;
+                    box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+                }
+                
+                .status-badge {
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                }
+                
+                .status-badge.active {
+                    background-color: #e8f5e8;
+                    color: #2e7d32;
+                }
+                
+                .status-badge.inactive {
+                    background-color: #ffebee;
+                    color: #c62828;
+                }
+                
+                .status-badge.maintenance {
+                    background-color: #fff3e0;
+                    color: #ef6c00;
+                }
+                
+                .summary-bar {
+                    display: flex;
+                    gap: 20px;
+                    padding: 16px;
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    margin-top: 20px;
+                }
+                
+                .summary-item {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 4px;
+                }
+                
+                .summary-label {
+                    font-size: 12px;
+                    color: var(--muted);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .summary-value {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: var(--green);
+                }
+                
+                /* Scrollbar styles for arac table */
+                .arac-table-container::-webkit-scrollbar {
+                    width: 8px;
+                    height: 8px;
+                }
+                
+                .arac-table-container::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 4px;
+                }
+                
+                .arac-table-container::-webkit-scrollbar-thumb {
+                    background: #c1c1c1;
+                    border-radius: 4px;
+                }
+                
+                .arac-table-container::-webkit-scrollbar-thumb:hover {
+                    background: #a8a8a8;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    initAracFunctionality() {
+        // Initialize table interactions
+        this.initAracTableInteractions();
+        
+        // Initialize filter functionality
+        this.initAracFilters();
+    }
+
+    initAracTableInteractions() {
+        const table = document.getElementById('aracTable');
+        if (!table) return;
+
+        // Make all cells editable except status column
+        const cells = table.querySelectorAll('tbody td:not(:last-child)');
+        cells.forEach(cell => {
+            cell.setAttribute('contenteditable', 'true');
+            cell.classList.add('editable-cell');
+            
+            // Click to focus and highlight
+            cell.addEventListener('click', () => {
+                // Remove focus from all cells
+                cells.forEach(c => {
+                    c.classList.remove('cell-focused');
+                    c.classList.remove('selected');
+                    c.classList.remove('active');
+                });
+                // Add focus to clicked cell
+                cell.classList.add('cell-focused');
+                cell.classList.add('selected');
+                cell.classList.add('active');
+                cell.focus();
+                
+                // Select all text in the cell (Excel-like behavior)
+                setTimeout(() => {
+                    if (window.getSelection) {
+                        const selection = window.getSelection();
+                        const range = document.createRange();
+                        range.selectNodeContents(cell);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }, 10);
+            });
+            
+            // Blur event to save changes
+            cell.addEventListener('blur', () => {
+                cell.classList.remove('cell-focused');
+                cell.classList.remove('active');
+                console.log('Cell updated:', cell.textContent);
+            });
+            
+            // Enter key to move to next cell
+            cell.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const nextCell = cell.nextElementSibling;
+                    if (nextCell && nextCell.classList.contains('editable-cell')) {
+                        nextCell.click();
+                    }
+                }
+            });
+            
+            // Double click to select all text
+            cell.addEventListener('dblclick', () => {
+                if (window.getSelection) {
+                    const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(cell);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            });
+        });
+
+        // Row selection
+        const rows = table.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('click', (e) => {
+                // Don't trigger row selection if clicking on editable cell
+                if (e.target.classList.contains('editable-cell')) {
+                    return;
+                }
+                
+                // Remove selection from all rows
+                rows.forEach(r => r.classList.remove('selected'));
+                // Add selection to clicked row
+                row.classList.add('selected');
+            });
+        });
+    }
+
+    initAracFilters() {
+        // Filter functionality
+        const filterSelects = document.querySelectorAll('.arac-filters select');
+        filterSelects.forEach(select => {
+            select.addEventListener('change', () => {
+                this.applyAracFilters();
+            });
+        });
+
+        // Search button
+        const searchBtn = document.querySelector('.arac-filters .btn-primary');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                this.applyAracFilters();
+            });
+        }
+    }
+
+    applyAracFilters() {
+        const santiye = document.querySelector('.arac-filters select:nth-child(1)').value;
+        const durum = document.querySelector('.arac-filters select:nth-child(2)').value;
+        const yakit = document.querySelector('.arac-filters select:nth-child(3)').value;
+        
+        console.log('Applying arac filters:', { santiye, durum, yakit });
+        
+        // Here you would typically filter the table data
+        // For now, just log the filter values
+    }
+
+    showUzaktanYardimModule() {
+        // Hide welcome screen
+        this.hideWelcomeScreen();
+        
+        // Update page title
+        document.title = 'Uzaktan Yardım - İnşaat Muhasebe PRO - NOA YAZILIM - Firma: DEMO İNŞAAT';
+        
+        // Update main content
+        const moduleContainer = document.getElementById('moduleViewContainer');
+        if (moduleContainer) {
+            moduleContainer.innerHTML = `
+                <div class="uzaktan-yardim-container">
+                    <!-- Header -->
+                    <div class="uzaktan-yardim-header">
+                        <div class="header-left">
+                            <h2>Uzaktan Yardım</h2>
+                            <p>Tek tıkla destek alın, sorunlarınızı hızlıca çözün</p>
+                        </div>
+                        <div class="header-right">
+                            <div class="status-indicator online">
+                                <i class="fa-solid fa-circle"></i>
+                                <span>Çevrimiçi / Ortalama Yanıt: 3 dk</span>
+                            </div>
+                            <div class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: 09:00–18:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ticket System -->
+                    <div class="ticket-system-header">
+                        <div class="ticket-stats">
+                            <div class="stat-item">
+                                <i class="fa-solid fa-ticket"></i>
+                                <span class="stat-number">12</span>
+                                <span class="stat-label">Açık Talep</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fa-solid fa-clock"></i>
+                                <span class="stat-number">3</span>
+                                <span class="stat-label">Ortalama Yanıt</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fa-solid fa-check-circle"></i>
+                                <span class="stat-number">98%</span>
+                                <span class="stat-label">Çözüm Oranı</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="ticket-content">
+                        <div class="ticket-form-container">
+                            <div class="form-header">
+                                <h3><i class="fa-solid fa-ticket"></i> Destek Talebi Oluştur</h3>
+                                <p>Teknik destek ekibimiz size en kısa sürede yardımcı olacaktır</p>
+                            </div>
+                            
+                            <form class="ticket-form" id="ticketForm">
+                                <div class="form-section">
+                                    <h4><i class="fa-solid fa-info-circle"></i> Talep Bilgileri</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Konu *</label>
+                                            <input type="text" class="form-input" id="ticketSubject" placeholder="Sorununuzu kısaca açıklayın" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Öncelik *</label>
+                                            <select class="form-input" id="ticketPriority" required>
+                                                <option value="">Öncelik seçin</option>
+                                                <option value="low">Düşük</option>
+                                                <option value="medium" selected>Orta</option>
+                                                <option value="high">Yüksek</option>
+                                                <option value="urgent">Acil</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Açıklama *</label>
+                                        <textarea class="form-textarea" id="ticketDescription" placeholder="Sorununuzu detaylı olarak açıklayın. Hangi adımları takip ettiğiniz, hangi hata mesajlarını aldığınız gibi bilgileri ekleyin." rows="6" required></textarea>
+                                        <div class="char-counter">
+                                            <span id="charCount">0</span>/2000 karakter
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Kategori *</label>
+                                            <select class="form-input" id="ticketCategory" required>
+                                                <option value="">Kategori seçin</option>
+                                                <option value="efatura">E-Fatura</option>
+                                                <option value="reports">Rapor & Analiz</option>
+                                                <option value="installation">Kurulum & Güncelleme</option>
+                                                <option value="performance">Performans & Hız</option>
+                                                <option value="login">Giriş & Yetki</option>
+                                                <option value="other">Diğer</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>İlgili Şantiye/Şirket</label>
+                                            <select class="form-input" id="ticketCompany">
+                                                <option value="">Tümü</option>
+                                                <option value="demo">DEMO İNŞAAT</option>
+                                                <option value="lonicera">LONICERA OTEL</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4><i class="fa-solid fa-user"></i> İletişim Bilgileri</h4>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Ad Soyad *</label>
+                                            <input type="text" class="form-input" id="ticketName" placeholder="Adınız ve soyadınız" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>E-posta *</label>
+                                            <input type="email" class="form-input" id="ticketEmail" placeholder="ornek@email.com" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Telefon</label>
+                                        <input type="tel" class="form-input" id="ticketPhone" placeholder="0555 123 45 67">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Tercih Edilen İletişim Yöntemi</label>
+                                        <div class="contact-preferences">
+                                            <label class="radio-label">
+                                                <input type="radio" name="contactMethod" value="email" checked>
+                                                <span>E-posta</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="contactMethod" value="phone">
+                                                <span>Telefon</span>
+                                            </label>
+                                            <label class="radio-label">
+                                                <input type="radio" name="contactMethod" value="both">
+                                                <span>Her ikisi</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4><i class="fa-solid fa-paperclip"></i> Ekler & Ek Bilgiler</h4>
+                                    <div class="form-group">
+                                        <label>Ekran Görüntüsü / Dosya Ekle</label>
+                                        <div class="file-upload-area" id="fileUploadArea">
+                                            <div class="upload-icon">
+                                                <i class="fa-solid fa-cloud-upload-alt"></i>
+                                            </div>
+                                            <div class="upload-text">
+                                                <p>Dosyaları buraya sürükleyin veya <span class="upload-link">tıklayarak seçin</span></p>
+                                                <p class="upload-info">Desteklenen formatlar: JPG, PNG, PDF, DOC, XLS (Max: 10MB)</p>
+                                            </div>
+                                            <input type="file" id="ticketFiles" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" style="display: none;">
+                                        </div>
+                                        <div class="file-list" id="fileList"></div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label>Ek Notlar</label>
+                                        <textarea class="form-textarea" id="ticketNotes" placeholder="Ek bilgiler, özel istekler veya notlarınızı buraya yazabilirsiniz." rows="3"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4><i class="fa-solid fa-shield-alt"></i> Onay & Gönderim</h4>
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ticketKVKK" required>
+                                            <span class="checkmark"></span>
+                                            <span>KVKK şartlarını ve <a href="#" class="privacy-link">gizlilik politikasını</a> kabul ediyorum</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ticketNotification" checked>
+                                            <span class="checkmark"></span>
+                                            <span>Talep durumu hakkında e-posta ile bilgilendirilmek istiyorum</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-actions">
+                                        <button type="button" class="btn btn-outline" id="saveDraft">
+                                            <i class="fa-solid fa-save"></i>
+                                            Taslak Kaydet
+                                        </button>
+                                        <button type="submit" class="btn btn-primary" id="submitTicket">
+                                            <i class="fa-solid fa-paper-plane"></i>
+                                            Talebi Gönder
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div class="ticket-sidebar">
+                            <div class="help-card">
+                                <div class="help-header">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                    <h4>Hızlı Yardım</h4>
+                                </div>
+                                <div class="help-tips">
+                                    <div class="tip-item">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span>Ekran görüntüsü ekleyerek daha hızlı yardım alın</span>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span>Hata mesajlarını tam olarak kopyalayın</span>
+                                    </div>
+                                    <div class="tip-item">
+                                        <i class="fa-solid fa-check-circle"></i>
+                                        <span>Hangi adımları takip ettiğinizi belirtin</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <div class="status-header">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <h4>Yanıt Süreleri</h4>
+                                </div>
+                                <div class="response-times">
+                                    <div class="time-item">
+                                        <span class="priority urgent">Acil</span>
+                                        <span class="time">2-4 saat</span>
+                                    </div>
+                                    <div class="time-item">
+                                        <span class="priority high">Yüksek</span>
+                                        <span class="time">4-8 saat</span>
+                                    </div>
+                                    <div class="time-item">
+                                        <span class="priority medium">Orta</span>
+                                        <span class="time">8-24 saat</span>
+                                    </div>
+                                    <div class="time-item">
+                                        <span class="priority low">Düşük</span>
+                                        <span class="time">24-48 saat</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                </div>
+            `;
+        }
+        
+        // Add specific styles for uzaktan yardim module
+        this.addUzaktanYardimStyles();
+        
+        // Initialize uzaktan yardim functionality
+        this.initUzaktanYardimFunctionality();
+        
+        // Debug: Log all tab panes
+        setTimeout(() => {
+            this.debugTabPanes();
+        }, 100);
+    }
+
+    addUzaktanYardimStyles() {
+        // Add specific styles for uzaktan yardim module if not already present
+        if (!document.getElementById('uzaktan-yardim-styles')) {
+            const style = document.createElement('style');
+            style.id = 'uzaktan-yardim-styles';
+            style.textContent = `
+                .uzaktan-yardim-container {
+                    padding: 20px;
+                    background: var(--gray-50);
+                    min-height: calc(100vh - 200px);
+                }
+                
+                .uzaktan-yardim-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background: var(--white);
+                    padding: 20px;
+                    border-radius: 12px;
+                    box-shadow: var(--shadow);
+                    margin-bottom: 20px;
+                }
+                
+                .header-left h2 {
+                    margin: 0 0 8px 0;
+                    color: var(--text);
+                    font-size: 24px;
+                }
+                
+                .header-left p {
+                    margin: 0;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .header-right {
+                    display: flex;
+                    gap: 20px;
+                    align-items: center;
+                }
+                
+                .status-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 8px 12px;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                
+                .status-indicator.online {
+                    background: #e8f5e8;
+                    color: #2e7d32;
+                }
+                
+                .status-indicator.online i {
+                    color: #4caf50;
+                }
+                
+                .working-hours {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .uzaktan-yardim-tabs {
+                    display: flex;
+                    background: var(--white);
+                    border-radius: 12px;
+                    padding: 8px;
+                    box-shadow: var(--shadow);
+                    margin-bottom: 20px;
+                    overflow-x: auto;
+                }
+                
+                .tab-button {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 16px;
+                    border: none;
+                    background: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    color: var(--muted);
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
+                }
+                
+                .tab-button:hover {
+                    background: var(--gray-50);
+                    color: var(--text);
+                }
+                
+                .tab-button.active {
+                    background: var(--green);
+                    color: white;
+                }
+                
+                .tab-content {
+                    background: var(--white);
+                    border-radius: 12px;
+                    box-shadow: var(--shadow);
+                    overflow: hidden;
+                    min-height: 500px;
+                    position: relative;
+                }
+                
+                .tab-pane {
+                    display: none;
+                    padding: 20px;
+                    min-height: 400px;
+                    opacity: 0;
+                    visibility: hidden;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    transition: opacity 0.3s ease, visibility 0.3s ease;
+                }
+                
+                .tab-pane.active {
+                    display: block;
+                    visibility: visible;
+                    opacity: 1;
+                    position: relative;
+                    top: auto;
+                    left: auto;
+                    right: auto;
+                    bottom: auto;
+                    z-index: 10;
+                }
+                
+                /* Hızlı Bağlantı Styles */
+                .hizli-baglanti-container {
+                    display: grid;
+                    grid-template-columns: 1fr 300px;
+                    gap: 20px;
+                }
+                
+                .session-card {
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    padding: 24px;
+                }
+                
+                .card-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 24px;
+                }
+                
+                .card-header i {
+                    font-size: 24px;
+                    color: var(--green);
+                }
+                
+                .card-header h3 {
+                    margin: 0;
+                    color: var(--text);
+                    font-size: 20px;
+                }
+                
+                .session-code-section {
+                    margin-bottom: 24px;
+                }
+                
+                .code-display {
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                
+                .session-code {
+                    font-size: 32px;
+                    font-weight: 700;
+                    color: var(--green);
+                    font-family: 'Courier New', monospace;
+                }
+                
+                .code-actions {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .btn-icon {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 40px;
+                    height: 40px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: var(--white);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .btn-icon:hover {
+                    background: var(--gray-50);
+                    border-color: var(--green);
+                }
+                
+                .code-timer {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .share-link-section {
+                    margin-bottom: 24px;
+                }
+                
+                .share-link-section label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--text);
+                }
+                
+                .link-input {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .link-input input {
+                    flex: 1;
+                    padding: 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                }
+                
+                .permissions-section {
+                    margin-bottom: 24px;
+                }
+                
+                .permissions-section h4 {
+                    margin: 0 0 16px 0;
+                    color: var(--text);
+                }
+                
+                .permission-toggles {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .toggle {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                }
+                
+                .toggle-slider {
+                    position: relative;
+                    width: 44px;
+                    height: 24px;
+                    background: var(--border);
+                    border-radius: 12px;
+                    transition: all 0.2s ease;
+                }
+                
+                .toggle input:checked + .toggle-slider {
+                    background: var(--green);
+                }
+                
+                .toggle-slider::after {
+                    content: '';
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 20px;
+                    height: 20px;
+                    background: white;
+                    border-radius: 50%;
+                    transition: all 0.2s ease;
+                }
+                
+                .toggle input:checked + .toggle-slider::after {
+                    transform: translateX(20px);
+                }
+                
+                .toggle input {
+                    display: none;
+                }
+                
+                .screenshot-section {
+                    margin-bottom: 24px;
+                }
+                
+                .screenshot-section label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--text);
+                }
+                
+                .drag-drop-area {
+                    border: 2px dashed var(--border);
+                    border-radius: 8px;
+                    padding: 32px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .drag-drop-area:hover {
+                    border-color: var(--green);
+                    background: var(--gray-50);
+                }
+                
+                .drag-drop-area i {
+                    font-size: 32px;
+                    color: var(--muted);
+                    margin-bottom: 12px;
+                }
+                
+                .drag-drop-area p {
+                    margin: 0;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .action-buttons {
+                    display: flex;
+                    gap: 12px;
+                }
+                
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 24px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: var(--white);
+                    color: var(--text);
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+                
+                .btn-primary {
+                    background: var(--green);
+                    color: white;
+                    border-color: var(--green);
+                }
+                
+                .btn-primary:hover {
+                    background: #1b5e20;
+                }
+                
+                .btn-outline:hover {
+                    background: var(--gray-50);
+                }
+                
+                /* Right Column Styles */
+                .right-column {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+                
+                .status-card {
+                    background: var(--white);
+                    border: 1px solid var(--green);
+                    border-radius: 12px;
+                    padding: 20px;
+                }
+                
+                .status-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 20px;
+                }
+                
+                .status-header i {
+                    color: var(--green);
+                    font-size: 20px;
+                }
+                
+                .status-header h4 {
+                    margin: 0;
+                    color: var(--text);
+                }
+                
+                .timeline {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .timeline-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 8px 0;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .timeline-item.completed {
+                    color: var(--green);
+                }
+                
+                .timeline-item.active {
+                    color: var(--text);
+                    font-weight: 500;
+                }
+                
+                .quick-help {
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    padding: 20px;
+                }
+                
+                .quick-help h4 {
+                    margin: 0 0 16px 0;
+                    color: var(--text);
+                }
+                
+                .quick-help-buttons {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                
+                .quick-help-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    background: var(--white);
+                    color: var(--text);
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+                
+                .quick-help-btn:hover {
+                    background: var(--gray-50);
+                    border-color: var(--green);
+                }
+                
+                /* Chat Styles */
+                .chat-container {
+                    display: grid;
+                    grid-template-columns: 300px 1fr;
+                    height: 600px;
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    overflow: hidden;
+                }
+                
+                .chat-sidebar {
+                    background: var(--gray-50);
+                    border-right: 1px solid var(--border);
+                    padding: 20px;
+                }
+                
+                .chat-sidebar h4 {
+                    margin: 0 0 16px 0;
+                    color: var(--text);
+                }
+                
+                .chat-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .chat-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 12px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .chat-item:hover {
+                    background: var(--white);
+                }
+                
+                .chat-item.active {
+                    background: var(--green);
+                    color: white;
+                }
+                
+                .chat-avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: var(--green);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                }
+                
+                .chat-info {
+                    flex: 1;
+                }
+                
+                .chat-name {
+                    font-weight: 500;
+                    margin-bottom: 4px;
+                }
+                
+                .chat-last-message {
+                    font-size: 12px;
+                    opacity: 0.8;
+                }
+                
+                .chat-time {
+                    font-size: 12px;
+                    opacity: 0.8;
+                }
+                
+                .chat-main {
+                    display: flex;
+                    flex-direction: column;
+                }
+                
+                .chat-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 20px;
+                    border-bottom: 1px solid var(--border);
+                }
+                
+                .chat-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-weight: 500;
+                }
+                
+                .chat-status {
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                }
+                
+                .chat-status.online {
+                    background: #e8f5e8;
+                    color: #2e7d32;
+                }
+                
+                .chat-messages {
+                    flex: 1;
+                    padding: 20px;
+                    overflow-y: auto;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+                
+                .message {
+                    display: flex;
+                    flex-direction: column;
+                    max-width: 70%;
+                }
+                
+                .message.user {
+                    align-self: flex-end;
+                }
+                
+                .message.agent {
+                    align-self: flex-start;
+                }
+                
+                .message-content {
+                    padding: 12px 16px;
+                    border-radius: 12px;
+                    font-size: 14px;
+                }
+                
+                .message.user .message-content {
+                    background: var(--green);
+                    color: white;
+                }
+                
+                .message.agent .message-content {
+                    background: var(--gray-50);
+                    color: var(--text);
+                }
+                
+                .message-time {
+                    font-size: 12px;
+                    color: var(--muted);
+                    margin-top: 4px;
+                }
+                
+                .quick-templates {
+                    display: flex;
+                    gap: 8px;
+                    padding: 16px 20px;
+                    border-top: 1px solid var(--border);
+                }
+                
+                .template-btn {
+                    padding: 8px 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    background: var(--white);
+                    color: var(--text);
+                    cursor: pointer;
+                    font-size: 12px;
+                    transition: all 0.2s ease;
+                }
+                
+                .template-btn:hover {
+                    background: var(--gray-50);
+                    border-color: var(--green);
+                }
+                
+                .chat-input {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 20px;
+                    border-top: 1px solid var(--border);
+                }
+                
+                .chat-input input {
+                    flex: 1;
+                    padding: 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                }
+                
+                /* System Check Styles */
+                .system-check-container {
+                    padding: 20px;
+                }
+                
+                .system-check-container h3 {
+                    margin: 0 0 24px 0;
+                    color: var(--text);
+                }
+                
+                .check-summary {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 24px;
+                }
+                
+                .check-card {
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    padding: 20px;
+                    text-align: center;
+                }
+                
+                .check-card.passed {
+                    border-color: var(--green);
+                }
+                
+                .check-card.warning {
+                    border-color: #ff9800;
+                }
+                
+                .check-card.error {
+                    border-color: #f44336;
+                }
+                
+                .check-card i {
+                    font-size: 32px;
+                    margin-bottom: 12px;
+                }
+                
+                .check-card.passed i {
+                    color: var(--green);
+                }
+                
+                .check-card.warning i {
+                    color: #ff9800;
+                }
+                
+                .check-card.error i {
+                    color: #f44336;
+                }
+                
+                .check-card h4 {
+                    margin: 0 0 8px 0;
+                    color: var(--text);
+                }
+                
+                .check-card p {
+                    margin: 0 0 16px 0;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .check-status {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                
+                .check-card.passed .check-status {
+                    color: var(--green);
+                }
+                
+                .check-card.warning .check-status {
+                    color: #ff9800;
+                }
+                
+                .check-card.error .check-status {
+                    color: #f44336;
+                }
+                
+                /* FAQ Styles */
+                .faq-container {
+                    padding: 20px;
+                }
+                
+                .faq-search {
+                    margin-bottom: 24px;
+                }
+                
+                .search-box {
+                    position: relative;
+                    margin-bottom: 16px;
+                }
+                
+                .search-box i {
+                    position: absolute;
+                    left: 12px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: var(--muted);
+                }
+                
+                .search-box input {
+                    width: 100%;
+                    padding: 12px 12px 12px 40px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                }
+                
+                .faq-tags {
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                }
+                
+                .tag-btn {
+                    padding: 8px 16px;
+                    border: 1px solid var(--border);
+                    border-radius: 16px;
+                    background: var(--white);
+                    color: var(--text);
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+                
+                .tag-btn.active,
+                .tag-btn:hover {
+                    background: var(--green);
+                    color: white;
+                    border-color: var(--green);
+                }
+                
+                .faq-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .faq-item {
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    overflow: hidden;
+                }
+                
+                .faq-question {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 16px;
+                    background: var(--white);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .faq-question:hover {
+                    background: var(--gray-50);
+                }
+                
+                .faq-question i {
+                    transition: transform 0.2s ease;
+                }
+                
+                .faq-item.active .faq-question i {
+                    transform: rotate(180deg);
+                }
+                
+                .faq-answer {
+                    padding: 0 16px;
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: all 0.3s ease;
+                }
+                
+                .faq-item.active .faq-answer {
+                    padding: 16px;
+                    max-height: 500px;
+                }
+                
+                .faq-answer ol {
+                    margin: 0 0 16px 0;
+                    padding-left: 20px;
+                }
+                
+                .faq-answer li {
+                    margin-bottom: 8px;
+                    color: var(--text);
+                }
+                
+                .faq-link {
+                    color: var(--green);
+                    text-decoration: none;
+                    font-weight: 500;
+                }
+                
+                .faq-link:hover {
+                    text-decoration: underline;
+                }
+                
+                /* Downloads Styles */
+                .downloads-container {
+                    padding: 20px;
+                }
+                
+                .downloads-container h3 {
+                    margin: 0 0 24px 0;
+                    color: var(--text);
+                }
+                
+                .download-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 20px;
+                }
+                
+                .download-card {
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 12px;
+                    padding: 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                }
+                
+                .download-icon {
+                    width: 60px;
+                    height: 60px;
+                    background: var(--green);
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 24px;
+                }
+                
+                .download-info {
+                    flex: 1;
+                }
+                
+                .download-info h4 {
+                    margin: 0 0 8px 0;
+                    color: var(--text);
+                }
+                
+                .download-info p {
+                    margin: 0 0 4px 0;
+                    color: var(--muted);
+                    font-size: 14px;
+                }
+                
+                .download-actions {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                /* Ticket System Styles */
+                .ticket-system-header {
+                    background: var(--white);
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    box-shadow: var(--shadow);
+                }
+                
+                .ticket-stats {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 20px;
+                }
+                
+                .stat-item {
+                    text-align: center;
+                    padding: 16px;
+                    background: var(--gray-50);
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                }
+                
+                .stat-item i {
+                    font-size: 24px;
+                    color: var(--green);
+                    margin-bottom: 8px;
+                    display: block;
+                }
+                
+                .stat-number {
+                    display: block;
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: var(--text);
+                    margin-bottom: 4px;
+                }
+                
+                .stat-label {
+                    font-size: 12px;
+                    color: var(--muted);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                /* Ticket Content Layout */
+                .ticket-content {
+                    display: grid;
+                    grid-template-columns: 1fr 300px;
+                    gap: 20px;
+                }
+                
+                .ticket-form-container {
+                    background: var(--white);
+                    border-radius: 12px;
+                    padding: 24px;
+                    box-shadow: var(--shadow);
+                }
+                
+                .form-header {
+                    text-align: center;
+                    margin-bottom: 32px;
+                    padding-bottom: 24px;
+                    border-bottom: 1px solid var(--border);
+                }
+                
+                .form-header h3 {
+                    margin: 0 0 12px 0;
+                    color: var(--text);
+                    font-size: 24px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 12px;
+                }
+                
+                .form-header h3 i {
+                    color: var(--green);
+                }
+                
+                .form-header p {
+                    margin: 0;
+                    color: var(--muted);
+                    font-size: 16px;
+                }
+                
+                /* Form Sections */
+                .form-section {
+                    margin-bottom: 32px;
+                    padding: 24px;
+                    background: var(--gray-50);
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                }
+                
+                .form-section h4 {
+                    margin: 0 0 20px 0;
+                    color: var(--text);
+                    font-size: 18px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                
+                .form-section h4 i {
+                    color: var(--green);
+                }
+                
+                .form-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 16px;
+                    margin-bottom: 16px;
+                }
+                
+                .form-group {
+                    margin-bottom: 20px;
+                }
+                
+                .form-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--text);
+                    font-size: 14px;
+                }
+                
+                .form-input,
+                .form-textarea {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                    background: var(--white);
+                    transition: all 0.2s ease;
+                    box-sizing: border-box;
+                }
+                
+                .form-input:focus,
+                .form-textarea:focus {
+                    outline: none;
+                    border-color: var(--green);
+                    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+                }
+                
+                .form-textarea {
+                    resize: vertical;
+                    min-height: 120px;
+                    font-family: inherit;
+                }
+                
+                .char-counter {
+                    text-align: right;
+                    font-size: 12px;
+                    color: var(--muted);
+                    margin-top: 4px;
+                }
+                
+                /* Contact Preferences */
+                .contact-preferences {
+                    display: flex;
+                    gap: 20px;
+                    margin-top: 8px;
+                }
+                
+                .radio-label {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+                
+                .radio-label input[type="radio"] {
+                    margin: 0;
+                }
+                
+                /* File Upload */
+                .file-upload-area {
+                    border: 2px dashed var(--border);
+                    border-radius: 8px;
+                    padding: 32px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    background: var(--white);
+                }
+                
+                .file-upload-area:hover {
+                    border-color: var(--green);
+                    background: var(--gray-50);
+                }
+                
+                .upload-icon {
+                    font-size: 48px;
+                    color: var(--muted);
+                    margin-bottom: 16px;
+                }
+                
+                .upload-text p {
+                    margin: 0 0 8px 0;
+                    color: var(--text);
+                }
+                
+                .upload-link {
+                    color: var(--green);
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+                
+                .upload-info {
+                    font-size: 12px;
+                    color: var(--muted);
+                }
+                
+                .file-list {
+                    margin-top: 16px;
+                }
+                
+                .file-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 12px;
+                    background: var(--white);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    margin-bottom: 8px;
+                }
+                
+                .file-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    flex: 1;
+                }
+                
+                .file-info i {
+                    color: var(--muted);
+                    font-size: 16px;
+                }
+                
+                .file-name {
+                    font-weight: 500;
+                    color: var(--text);
+                    font-size: 14px;
+                }
+                
+                .file-size {
+                    color: var(--muted);
+                    font-size: 12px;
+                }
+                
+                .remove-file {
+                    background: none;
+                    border: none;
+                    color: var(--muted);
+                    cursor: pointer;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    transition: all 0.2s ease;
+                }
+                
+                .remove-file:hover {
+                    background: #ffebee;
+                    color: #f44336;
+                }
+                
+                /* Checkbox and Radio Styling */
+                .checkbox-label {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 12px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    line-height: 1.4;
+                }
+                
+                .checkbox-label input[type="checkbox"] {
+                    margin: 0;
+                    margin-top: 2px;
+                }
+                
+                .privacy-link {
+                    color: var(--green);
+                    text-decoration: none;
+                }
+                
+                .privacy-link:hover {
+                    text-decoration: underline;
+                }
+                
+                /* Form Actions */
+                .form-actions {
+                    display: flex;
+                    gap: 16px;
+                    justify-content: flex-end;
+                    margin-top: 24px;
+                    padding-top: 24px;
+                    border-top: 1px solid var(--border);
+                }
+                
+                /* Ticket Sidebar */
+                .ticket-sidebar {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
+                
+                .help-card,
+                .status-card {
+                    background: var(--white);
+                    border-radius: 12px;
+                    padding: 20px;
+                    box-shadow: var(--shadow);
+                    border: 1px solid var(--border);
+                }
+                
+                .help-header,
+                .status-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+                
+                .help-header i,
+                .status-header i {
+                    color: var(--green);
+                    font-size: 20px;
+                }
+                
+                .help-header h4,
+                .status-header h4 {
+                    margin: 0;
+                    color: var(--text);
+                    font-size: 16px;
+                }
+                
+                .help-tips {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .tip-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 8px;
+                    font-size: 13px;
+                    color: var(--text);
+                    line-height: 1.4;
+                }
+                
+                .tip-item i {
+                    color: var(--green);
+                    margin-top: 2px;
+                    flex-shrink: 0;
+                }
+                
+                .response-times {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                }
+                
+                .time-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 12px;
+                    background: var(--gray-50);
+                    border-radius: 6px;
+                    font-size: 13px;
+                }
+                
+                .priority {
+                    padding: 4px 8px;
+                    border-radius: 12px;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                }
+                
+                .priority.urgent {
+                    background: #ffebee;
+                    color: #c62828;
+                }
+                
+                .priority.high {
+                    background: #fff3e0;
+                    color: #ef6c00;
+                }
+                
+                .priority.medium {
+                    background: #e8f5e8;
+                    color: #2e7d32;
+                }
+                
+                .priority.low {
+                    background: #f3e5f5;
+                    color: #6a1b9a;
+                }
+                
+                .time {
+                    font-weight: 500;
+                    color: var(--text);
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 768px) {
+                    .ticket-content {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .ticket-stats {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .form-row {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .contact-preferences {
+                        flex-direction: column;
+                        gap: 12px;
+                    }
+                    
+                    .form-actions {
+                        flex-direction: column;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    initUzaktanYardimFunctionality() {
+        // Initialize ticket form functionality
+        this.initTicketFormFunctionality();
+        
+        // Initialize file upload functionality
+        this.initFileUploadFunctionality();
+        
+        // Initialize character counter
+        this.initCharacterCounter();
+        
+        console.log('Ticket system functionality initialized');
+    }
+
+    initTicketFormFunctionality() {
+        const form = document.getElementById('ticketForm');
+        if (!form) return;
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleTicketSubmission();
+        });
+
+        // Save draft functionality
+        const saveDraftBtn = document.getElementById('saveDraft');
+        if (saveDraftBtn) {
+            saveDraftBtn.addEventListener('click', () => {
+                this.saveTicketDraft();
+            });
+        }
+
+        // Priority change handler
+        const prioritySelect = document.getElementById('ticketPriority');
+        if (prioritySelect) {
+            prioritySelect.addEventListener('change', (e) => {
+                this.updatePriorityIndicator(e.target.value);
+            });
+        }
+
+        console.log('Ticket form functionality initialized');
+    }
+
+    initFileUploadFunctionality() {
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('ticketFiles');
+        const fileList = document.getElementById('fileList');
+
+        if (!fileUploadArea || !fileInput || !fileList) return;
+
+        // Click to select files
+        fileUploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop functionality
+        fileUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--green)';
+            fileUploadArea.style.background = 'var(--gray-50)';
+        });
+
+        fileUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--border)';
+            fileUploadArea.style.background = 'var(--white)';
+        });
+
+        fileUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--border)';
+            fileUploadArea.style.background = 'var(--white)';
+            
+            const files = e.dataTransfer.files;
+            this.handleFileSelection(files);
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            this.handleFileSelection(e.target.files);
+        });
+
+        console.log('File upload functionality initialized');
+    }
+
+    initCharacterCounter() {
+        const descriptionTextarea = document.getElementById('ticketDescription');
+        const charCount = document.getElementById('charCount');
+
+        if (!descriptionTextarea || !charCount) return;
+
+        descriptionTextarea.addEventListener('input', (e) => {
+            const count = e.target.value.length;
+            charCount.textContent = count;
+            
+            // Update counter color based on length
+            if (count > 1800) {
+                charCount.style.color = '#f44336';
+            } else if (count > 1500) {
+                charCount.style.color = '#ff9800';
+            } else {
+                charCount.style.color = 'var(--muted)';
+            }
+        });
+
+        console.log('Character counter initialized');
+    }
+
+    handleFileSelection(files) {
+        const fileList = document.getElementById('fileList');
+        if (!fileList) return;
+
+        // Clear existing list
+        fileList.innerHTML = '';
+
+        Array.from(files).forEach((file, index) => {
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                this.showNotification('Dosya boyutu 10MB\'dan büyük olamaz: ' + file.name, 'error');
+                return;
+            }
+
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div class="file-info">
+                    <i class="fa-solid fa-file"></i>
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-size">${this.formatFileSize(file.size)}</span>
+                </div>
+                <button class="remove-file" data-index="${index}">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            `;
+
+            // Remove file functionality
+            const removeBtn = fileItem.querySelector('.remove-file');
+            removeBtn.addEventListener('click', () => {
+                this.removeFile(index);
+            });
+
+            fileList.appendChild(fileItem);
+        });
+
+        console.log(`${files.length} dosya seçildi`);
+    }
+
+    removeFile(index) {
+        const fileInput = document.getElementById('ticketFiles');
+        const fileList = document.getElementById('fileList');
+
+        if (!fileInput || !fileList) return;
+
+        // Create new FileList without the removed file
+        const dt = new DataTransfer();
+        const files = fileInput.files;
+
+        for (let i = 0; i < files.length; i++) {
+            if (i !== index) {
+                dt.items.add(files[i]);
+            }
+        }
+
+        fileInput.files = dt.files;
+        this.handleFileSelection(fileInput.files);
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    updatePriorityIndicator(priority) {
+        // Update any priority-related UI elements
+        console.log('Priority updated to:', priority);
+    }
+
+    saveTicketDraft() {
+        const formData = this.getFormData();
+        localStorage.setItem('ticketDraft', JSON.stringify(formData));
+        this.showNotification('Taslak kaydedildi', 'success');
+        console.log('Ticket draft saved');
+    }
+
+    handleTicketSubmission() {
+        const formData = this.getFormData();
+        
+        // Validate form
+        if (!this.validateTicketForm(formData)) {
+            return;
+        }
+
+        // Show loading state
+        this.showLoadingState(true);
+
+        // Simulate API call
+        setTimeout(() => {
+            this.showLoadingState(false);
+            this.showTicketSuccess(formData);
+        }, 2000);
+
+        console.log('Ticket submitted:', formData);
+    }
+
+    getFormData() {
+        const form = document.getElementById('ticketForm');
+        if (!form) return {};
+
+        const formData = new FormData(form);
+        const data = {};
+
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
+        // Add additional form data
+        data.subject = document.getElementById('ticketSubject')?.value || '';
+        data.priority = document.getElementById('ticketPriority')?.value || '';
+        data.description = document.getElementById('ticketDescription')?.value || '';
+        data.category = document.getElementById('ticketCategory')?.value || '';
+        data.company = document.getElementById('ticketCompany')?.value || '';
+        data.name = document.getElementById('ticketName')?.value || '';
+        data.email = document.getElementById('ticketEmail')?.value || '';
+        data.phone = document.getElementById('ticketPhone')?.value || '';
+        data.notes = document.getElementById('ticketNotes')?.value || '';
+        data.contactMethod = document.querySelector('input[name="contactMethod"]:checked')?.value || '';
+        data.kvkk = document.getElementById('ticketKVKK')?.checked || false;
+        data.notifications = document.getElementById('ticketNotification')?.checked || false;
+
+        return data;
+    }
+
+    validateTicketForm(data) {
+        const requiredFields = ['subject', 'priority', 'description', 'category', 'name', 'email'];
+        
+        for (const field of requiredFields) {
+            if (!data[field] || data[field].trim() === '') {
+                this.showNotification(`Lütfen ${this.getFieldLabel(field)} alanını doldurun`, 'error');
+                return false;
+            }
+        }
+
+        if (!data.kvkk) {
+            this.showNotification('KVKK şartlarını kabul etmelisiniz', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    getFieldLabel(field) {
+        const labels = {
+            subject: 'konu',
+            priority: 'öncelik',
+            description: 'açıklama',
+            category: 'kategori',
+            name: 'ad soyad',
+            email: 'e-posta'
+        };
+        return labels[field] || field;
+    }
+
+    showLoadingState(show) {
+        const submitBtn = document.getElementById('submitTicket');
+        if (!submitBtn) return;
+
+        if (show) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Gönderiliyor...';
+        } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Talebi Gönder';
+        }
+    }
+
+    showTicketSuccess(data) {
+        // Create success modal
+        const modal = document.createElement('div');
+        modal.className = 'ticket-success-modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="success-icon">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <h3>Talep Başarıyla Gönderildi!</h3>
+                <p>Destek talebiniz alınmıştır. En kısa sürede size dönüş yapılacaktır.</p>
+                <div class="ticket-details">
+                    <div class="detail-item">
+                        <strong>Talep No:</strong> TK-${Date.now().toString().slice(-6)}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Konu:</strong> ${data.subject}
+                    </div>
+                    <div class="detail-item">
+                        <strong>Öncelik:</strong> ${this.getPriorityLabel(data.priority)}
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="this.closest('.ticket-success-modal').remove()">
+                    Tamam
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Add modal styles
+        if (!document.getElementById('ticket-modal-styles')) {
+            const style = document.createElement('style');
+            style.id = 'ticket-modal-styles';
+            style.textContent = `
+                .ticket-success-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
+                
+                .modal-content {
+                    background: white;
+                    padding: 32px;
+                    border-radius: 12px;
+                    text-align: center;
+                    max-width: 500px;
+                    width: 90%;
+                }
+                
+                .success-icon {
+                    font-size: 64px;
+                    color: var(--green);
+                    margin-bottom: 24px;
+                }
+                
+                .ticket-details {
+                    background: var(--gray-50);
+                    padding: 20px;
+                    border-radius: 8px;
+                    margin: 24px 0;
+                    text-align: left;
+                }
+                
+                .detail-item {
+                    margin-bottom: 8px;
+                }
+                
+                .detail-item:last-child {
+                    margin-bottom: 0;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Clear form
+        document.getElementById('ticketForm').reset();
+        document.getElementById('charCount').textContent = '0';
+        document.getElementById('fileList').innerHTML = '';
+    }
+
+    getPriorityLabel(priority) {
+        const labels = {
+            low: 'Düşük',
+            medium: 'Orta',
+            high: 'Yüksek',
+            urgent: 'Acil'
+        };
+        return labels[priority] || priority;
+    }
+
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i class="fa-solid fa-${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+            <button class="notification-close">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        `;
+
+        // Add notification styles
+        if (!document.getElementById('notification-styles')) {
+            const style = document.createElement('style');
+            style.id = 'notification-styles';
+            style.textContent = `
+                .notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: white;
+                    padding: 16px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    z-index: 1001;
+                    animation: slideIn 0.3s ease;
+                }
+                
+                .notification.success {
+                    border-left: 4px solid var(--green);
+                }
+                
+                .notification.error {
+                    border-left: 4px solid #f44336;
+                }
+                
+                .notification.info {
+                    border-left: 4px solid #2196f3;
+                }
+                
+                .notification i {
+                    font-size: 18px;
+                }
+                
+                .notification.success i {
+                    color: var(--green);
+                }
+                
+                .notification.error i {
+                    color: #f44336;
+                }
+                
+                .notification.info i {
+                    color: #2196f3;
+                }
+                
+                .notification-close {
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: var(--muted);
+                    padding: 4px;
+                    margin-left: auto;
+                }
+                
+                .notification-close:hover {
+                    color: var(--text);
+                }
+                
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(notification);
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+
+        // Close button functionality
+        const closeBtn = notification.querySelector('.notification-close');
+        closeBtn.addEventListener('click', () => {
+            notification.remove();
+        });
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
 }
