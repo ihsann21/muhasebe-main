@@ -18,6 +18,12 @@ function announceToScreenReader(message) {
 
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is logged in
+    if (!checkLoginStatus()) {
+        window.location.href = '/login.html';
+        return;
+    }
+
     new MenuManager();
     const toolbarManager = new ToolbarManager();
     new ButtonManager();
@@ -37,11 +43,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize support functionality
     initSupportFunctionality();
     
-    // Initialize floating help assistant
-    initFloatingHelpAssistant();
+    // Initialize floating help assistant with a small delay to ensure all modules are ready
+    setTimeout(() => {
+        initFloatingHelpAssistant();
+    }, 200);
 
-    // No default active menu - let users choose what they want to access
+    // Default startup page is now handled by ToolbarManager
 });
+
+// Login status check
+function checkLoginStatus() {
+    const savedSession = localStorage.getItem('muhasebeSession');
+    if (!savedSession) return false;
+    
+    try {
+        const session = JSON.parse(savedSession);
+        const now = new Date().getTime();
+        
+        if (session.expires > now) {
+            // Set current user info globally
+            window.currentUser = session.user;
+            return true;
+        } else {
+            localStorage.removeItem('muhasebeSession');
+            return false;
+        }
+    } catch (e) {
+        localStorage.removeItem('muhasebeSession');
+        return false;
+    }
+}
+
+// Logout function
+function logout() {
+    localStorage.removeItem('muhasebeSession');
+    window.location.href = '/login.html';
+}
+
+// Make logout function globally accessible
+window.logout = logout;
 
 // Modal functionality
 function initModalFunctionality() {
@@ -84,22 +124,18 @@ function initModalFunctionality() {
     // Handle "Kaydetmeden Çık" button
     kaydetmedenCik.addEventListener('click', () => {
         console.log('Kaydetmeden çıkılıyor...');
-        // Here you would typically show a confirmation or just close the app
-        alert('Kaydedilmemiş değişiklikler kaybolacak. Çıkış yapılıyor...');
         closeModal();
-        // You can add actual logout logic here
+        logout();
     });
 
     // Handle "Kaydet ve Çık" button
     kaydetVeCik.addEventListener('click', () => {
         console.log('Değişiklikler kaydediliyor ve çıkış yapılıyor...');
-        // Here you would typically save all changes first
-        alert('Değişiklikler kaydediliyor...');
+        closeModal();
+        // Simulate saving data
         setTimeout(() => {
-            alert('Değişiklikler kaydedildi. Çıkış yapılıyor...');
-            closeModal();
-            // You can add actual logout logic here
-        }, 1000);
+            logout();
+        }, 500);
     });
 
     // Handle "İptal" button
@@ -108,6 +144,11 @@ function initModalFunctionality() {
 
 // Support functionality
 function initSupportFunctionality() {
+    // Management Cards Click Events - delay to ensure DOM is ready
+    setTimeout(() => {
+        initManagementCards();
+    }, 100);
+    
     // Acil Destek Modal
     const acilDestekModal = document.getElementById('acilDestekModal');
     const acilDestekBtn = document.getElementById('acilDestekBtn');
@@ -259,7 +300,7 @@ function initSupportFunctionality() {
         messageDiv.className = 'message bot-message';
         messageDiv.innerHTML = `
             <div class="message-avatar">
-                <img src="muhasebeci.png" alt="Muhasebe Asistanı" class="message-robot-icon">
+                <img src="assets/images/muhasebeci.png" alt="Muhasebe Asistanı" class="message-robot-icon">
             </div>
             <div class="message-content">
                 <p>${response}</p>
@@ -387,9 +428,89 @@ function initSupportFunctionality() {
     };
 }
 
+// Management Cards functionality
+function initManagementCards() {
+    // Add click event listeners to management cards
+    const managementCards = document.querySelectorAll('.submenu-item');
+    console.log('Found management cards:', managementCards.length);
+    
+    managementCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const cardTitle = card.querySelector('h3').textContent.trim();
+            console.log('Management card clicked:', cardTitle);
+            
+            switch(cardTitle) {
+                case 'Firma Bilgileri':
+                    console.log('Firma Bilgileri card clicked');
+                    if (window.toolbarManager && window.toolbarManager.modules && window.toolbarManager.modules.firmaBilgileri) {
+                        console.log('Calling firmaBilgileri.show()');
+                        window.toolbarManager.modules.firmaBilgileri.show();
+                        // Hide welcome screen
+                        const welcomeScreen = document.getElementById('welcome-screen');
+                        if (welcomeScreen) {
+                            welcomeScreen.style.display = 'none';
+                        }
+                    } else {
+                        console.error('firmaBilgileri module not found');
+                    }
+                    break;
+                    
+                case 'Program Ayarları':
+                    console.log('Program Ayarları card clicked');
+                    if (window.toolbarManager && window.toolbarManager.modules && window.toolbarManager.modules.programAyarlari) {
+                        console.log('Calling programAyarlari.show()');
+                        window.toolbarManager.modules.programAyarlari.show();
+                        // Hide welcome screen
+                        const welcomeScreen = document.getElementById('welcome-screen');
+                        if (welcomeScreen) {
+                            welcomeScreen.style.display = 'none';
+                        }
+                    } else {
+                        console.error('programAyarlari module not found');
+                    }
+                    break;
+                    
+                case 'Kullanıcı Yönetimi':
+                    console.log('Kullanıcı Yönetimi card clicked');
+                    if (window.toolbarManager && window.toolbarManager.modules && window.toolbarManager.modules.kullaniciYonetimi) {
+                        console.log('Calling kullaniciYonetimi.show()');
+                        window.toolbarManager.modules.kullaniciYonetimi.show();
+                        // Hide welcome screen
+                        const welcomeScreen = document.getElementById('welcome-screen');
+                        if (welcomeScreen) {
+                            welcomeScreen.style.display = 'none';
+                        }
+                    } else {
+                        console.error('kullaniciYonetimi module not found');
+                    }
+                    break;
+                    
+                default:
+                    console.log('Unknown card clicked:', cardTitle);
+                    break;
+            }
+        });
+        
+        // Add hover effect
+        card.style.cursor = 'pointer';
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-2px)';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+        });
+    });
+}
+
 // Floating Help Assistant functionality
 function initFloatingHelpAssistant() {
     const floatingHelpAssistant = document.getElementById('floatingHelpAssistant');
+    
+    if (!floatingHelpAssistant) {
+        console.error('Floating help assistant element not found');
+        return;
+    }
+    
     const floatingChatBot = document.getElementById('floatingChatBot');
     const floatingChatClose = document.getElementById('floatingChatClose');
     const floatingChatExpand = document.getElementById('floatingChatExpand');
@@ -397,13 +518,35 @@ function initFloatingHelpAssistant() {
     const floatingChatInput = document.getElementById('floatingChatInput');
     const floatingSendMessage = document.getElementById('floatingSendMessage');
     const floatingFileInput = document.getElementById('floatingFileInput');
-    const floatingQuickQuestions = floatingChatBot.querySelectorAll('.quick-question');
+    const floatingQuickQuestions = floatingChatBot ? floatingChatBot.querySelectorAll('.quick-question') : [];
 
-    // Show floating chat bot when help assistant is clicked
+    // Show chat bot modal when help assistant is clicked
     floatingHelpAssistant.addEventListener('click', () => {
-        floatingHelpAssistant.style.display = 'none'; // Hide the button
-        floatingChatBot.classList.add('show'); // Show the chat bot
-        floatingChatInput.focus();
+        console.log('Floating help assistant clicked');
+        
+        // Try multiple times with increasing delays
+        let attempts = 0;
+        const maxAttempts = 10;
+        
+        function tryOpenChatBot() {
+            attempts++;
+            console.log(`Attempt ${attempts} to open chat bot`);
+            
+            if (window.toolbarManager && window.toolbarManager.modules && window.toolbarManager.modules.chatBot) {
+                console.log('Opening chat bot module');
+                window.toolbarManager.modules.chatBot.show();
+                return;
+            }
+            
+            if (attempts < maxAttempts) {
+                console.log(`ToolbarManager not ready, retrying in ${attempts * 50}ms`);
+                setTimeout(tryOpenChatBot, attempts * 50);
+            } else {
+                console.error('Failed to open chat bot after', maxAttempts, 'attempts');
+            }
+        }
+        
+        tryOpenChatBot();
     });
 
     // Close floating chat bot
@@ -484,7 +627,7 @@ function initFloatingHelpAssistant() {
         messageDiv.className = 'message bot-message';
         messageDiv.innerHTML = `
             <div class="message-avatar">
-                <img src="muhasebeci.png" alt="Muhasebe Asistanı" class="message-robot-icon">
+                <img src="assets/images/muhasebeci.png" alt="Muhasebe Asistanı" class="message-robot-icon">
             </div>
             <div class="message-content">
                 <p>${response}</p>

@@ -279,6 +279,25 @@ export class MenuManager {
         this.closeDropdown();
         
         // Handle specific submenu items
-        console.log('Submenu item clicked:', title);
+        switch (title) {
+            case 'Muhasebeciler Arası Mesajlaşma':
+                if (window.toolbarManager && window.toolbarManager.modules.mesajlar) {
+                    window.toolbarManager.modules.mesajlar.show();
+                }
+                break;
+            case 'Acil Destek':
+                if (window.toolbarManager && window.toolbarManager.modules.acilDestek) {
+                    window.toolbarManager.modules.acilDestek.show();
+                }
+                break;
+            case 'Chat Bot':
+                if (window.toolbarManager && window.toolbarManager.modules.chatBot) {
+                    window.toolbarManager.modules.chatBot.show();
+                }
+                break;
+            default:
+                console.log('Submenu item clicked:', title);
+                break;
+        }
     }
 }
