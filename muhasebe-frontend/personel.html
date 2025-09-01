@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personel - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filters { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .filter-input, .filter-select { border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:14px; }
+        .filter-input:focus, .filter-select:focus { outline:none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.10); }
+        .personnel-grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+        .person-card { background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:.16s; display:grid; grid-template-columns: 64px 1fr; gap:12px; align-items:center; padding:12px; }
+        .person-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+        .avatar { width:64px; height:64px; border-radius:50%; background: linear-gradient(135deg,#e2f3e7,#f1f5f9); color: var(--green); display:flex; align-items:center; justify-content:center; font-weight:600; }
+        .person-body { display:grid; gap:6px; }
+        .person-name { font-weight:600; }
+        .meta { display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+        .badge { padding:3px 8px; border-radius:999px; border:1px solid var(--border); font-size:12px; }
+        .badge.success { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+        .badge.warning { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+        .badge.info { background:#e0f2fe; color:#075985; border-color:#bae6fd; }
+        .details-btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:6px 10px; cursor:pointer; }
+        .details-btn:hover { border-color: var(--green); }
+        .card-actions { display:flex; justify-content:space-between; align-items:center; margin-top:4px; }
+        .mini { font-size:12px; color:var(--muted); }
+        .drawer { position: fixed; right: -480px; top:0; width: 420px; max-width: 95vw; height: 100vh; background:#fff; border-left:1px solid var(--border); box-shadow: -10px 0 20px rgba(0,0,0,.08); transition: right .2s ease; z-index: 200; display:flex; flex-direction:column; }
+        .drawer.open { right: 0; }
+        .drawer-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .drawer-title { font-weight:600; }
+        .drawer-body { padding:16px; overflow:auto; display:grid; gap:12px; }
+        .section-title { font-weight:600; margin: 12px 0 6px; font-size:15px; }
+        .kv { display:grid; grid-template-columns: 140px 1fr; gap:6px; font-size:14px; }
+        .kv span { color: var(--muted); }
+        .timeline { border-left:2px solid var(--border); margin-left:10px; padding-left:7px; display:grid; gap:12px; margin-top:8px; }
+        .tl-item { position:relative; padding: 4px 0 4px 12px; }
+        .tl-item::before { content:''; position:absolute; left: -14px; top: 8px; width:10px; height:10px; background: var(--green); border-radius:50%; border:2px solid var(--white); box-shadow: 0 0 0 2px rgba(46,125,50,.15); }
+        .chip { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); border-radius:999px; padding:3px 8px; font-size:12px; background:#fff; }
+        /* Modal */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.15); display: none; align-items: center; justify-content: center; z-index: 300; }
+        .modal-backdrop[data-open="true"]{ display:flex; }
+        .modal { width: 720px; max-width: 95vw; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow: var(--shadow-lg); display:flex; flex-direction:column; }
+        .modal-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .modal-title { font-weight:600; }
+        .modal-body { padding:16px; display:grid; gap:12px; }
+        .modal-actions { padding:12px 16px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
+        .input-row { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .btn-group { display:flex; gap:6px; }
+        .field { display:grid; gap:6px; }
+        .field-label { font-size:12px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo"><i class="fa-solid fa-gear"></i></div>
+            <div class="brand-info"><h1>İnşaat Muhasebe PRO</h1><span class="version">Volass İnşaat</span></div>
+        </div>
+        <nav class="main-menu">
+            <button class="menu-item active" onclick="window.location.href='index.html'"><i class="fa-solid fa-book"></i><span>Tanımlar</span></button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'"><i class="fa-solid fa-right-left"></i><span>Hareketler</span></button>
+            <button class="menu-item"><i class="fa-solid fa-chart-bar"></i><span>Raporlar</span></button>
+            <button class="menu-item"><i class="fa-solid fa-life-ring"></i><span>Yardım</span></button>
+            <button class="menu-item" onclick="window.location.href='mesajlar.html'"><i class="fa-solid fa-comments"></i><span>Mesajlar</span></button>
+            <button class="menu-item" onclick="window.location.href='program-ayarlari.html'"><i class="fa-solid fa-cogs"></i><span>Bilgiler ve Yönetim</span></button>
+            <button class="menu-item"><i class="fa-solid fa-right-from-bracket"></i><span>Çıkış</span></button>
+        </nav>
+    </header>
+
+    <!-- Quick toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-home"></i><span>Ana Sayfa</span></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="content-header"><h2>Personel</h2><div class="header-actions"><button class="btn btn-primary" onclick="openCreateForm()"><i class="fa-solid fa-plus"></i> Yeni Personel</button></div></div>
+
+        <!-- Filters -->
+        <section class="filters">
+            <div class="field">
+                <label class="field-label" for="filterDepartment">Departman</label>
+                <select id="filterDepartment" class="filter-select" title="Departman">
+                    <option value="">Departman (Hepsi)</option>
+                    <option value="saha">Saha</option>
+                    <option value="ofis">Ofis</option>
+                    <option value="satinalma">Satınalma</option>
+                    <option value="insaat">İnşaat</option>
+                    <option value="mekanik">Mekanik</option>
+                    <option value="elektrik">Elektrik</option>
+                </select>
+            </div>
+            <div class="field">
+                <label class="field-label" for="filterPosition">Pozisyon</label>
+                <select id="filterPosition" class="filter-select" title="Pozisyon">
+                    <option value="">Pozisyon (Hepsi)</option>
+                    <option value="muhendis">Şantiye Mühendisi</option>
+                    <option value="forman">Formen</option>
+                    <option value="isguvenligi">İş Güvenliği Uzmanı</option>
+                    <option value="mimar">Mimar</option>
+                    <option value="tekniker">Tekniker</option>
+                    <option value="idari">İdari Personel</option>
+                </select>
+            </div>
+            <div class="field">
+                <label class="field-label" for="filterStatus">Durum</label>
+                <select id="filterStatus" class="filter-select" title="Durum">
+                    <option value="">Tümü</option>
+                    <option value="aktif">Aktif</option>
+                    <option value="izinde">İzinde</option>
+                    <option value="ayrildi">Ayrıldı</option>
+                </select>
+            </div>
+            <div class="field">
+                <label class="field-label" for="filterQuery">Arama</label>
+                <input id="filterQuery" class="filter-input" placeholder="Ad, pozisyon veya e-posta">
+            </div>
+        </section>
+
+        <!-- Personnel -->
+        <section id="personnelGrid" class="personnel-grid"></section>
+    </main>
+
+    <!-- Drawer -->
+    <aside id="drawer" class="drawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="drawer-title" id="dwTitle">Personel Detayı</div>
+            <button class="details-btn" onclick="closeDrawer()"><i class="fa-solid fa-times"></i> Kapat</button>
+        </div>
+        <div class="drawer-body" id="dwBody"></div>
+    </aside>
+
+    <!-- Form Modal -->
+    <div id="formModal" class="modal-backdrop" data-open="false">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fmTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="fmTitle">Yeni Personel</div>
+                <button class="details-btn" onclick="closeForm()"><i class="fa-solid fa-times"></i> Kapat</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-row">
+                    <input id="f_name" class="filter-input" placeholder="Ad Soyad">
+                    <input id="f_position" class="filter-input" placeholder="Pozisyon">
+                    <select id="f_department" class="filter-select" title="Departman">
+                        <option value="saha">Saha</option>
+                        <option value="ofis">Ofis</option>
+                        <option value="satinalma">Satınalma</option>
+                        <option value="insaat">İnşaat</option>
+                        <option value="mekanik">Mekanik</option>
+                        <option value="elektrik">Elektrik</option>
+                    </select>
+                    <select id="f_status" class="filter-select" title="Durum">
+                        <option value="aktif">Aktif</option>
+                        <option value="izinde">İzinde</option>
+                        <option value="ayrildi">Ayrıldı</option>
+                    </select>
+                    <input id="f_phone" class="filter-input" placeholder="Telefon">
+                    <input id="f_email" class="filter-input" type="email" placeholder="E-posta">
+                    <div class="field">
+                        <label class="field-label" for="f_start">İşe Başlangıç</label>
+                        <input id="f_start" class="filter-input" type="date" placeholder="İşe Başlangıç" aria-label="İşe Başlangıç" title="İşe Başlangıç">
+                    </div>
+                    <div class="field" id="exitField" data-hidden>
+                        <label class="field-label" for="f_exit">Çıkış Tarihi</label>
+                        <input id="f_exit" class="filter-input" type="date" placeholder="Çıkış Tarihi">
+                    </div>
+                </div>
+                <div class="input-row" id="leaveFields" data-hidden>
+                    <div class="field">
+                        <label class="field-label" for="f_leaveStart">İzne Çıkış</label>
+                        <input id="f_leaveStart" class="filter-input" type="date" placeholder="İzne Çıkış">
+                    </div>
+                    <div class="field">
+                        <label class="field-label" for="f_leaveEnd">İzne Dönüş</label>
+                        <input id="f_leaveEnd" class="filter-input" type="date" placeholder="İzne Dönüş">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeForm()">İptal</button>
+                <button class="btn btn-primary" onclick="saveForm()"><i class="fa-solid fa-save"></i> Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content"><span>Sunucu Tarihi: 16.07.2018</span><span>•</span><span>Lisans: DEMO İNŞAAT</span><span>•</span><span>Kullanıcı: Ana Kullanıcı</span></div>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'personnel';
+        const SEED = [
+            {id:1, name:'Ahmet Yılmaz', position:'Şantiye Mühendisi', department:'insaat', status:'aktif', location:'İstanbul', phone:'0532 000 00 01', email:'ahmet.yilmaz@example.com', start:'2022-03-01', exit:'', leaveStart:'', leaveEnd:'', avatar:''},
+            {id:2, name:'Elif Demir', position:'Mimar', department:'ofis', status:'izinde', location:'Ankara', phone:'0505 111 22 33', email:'elif.demir@example.com', start:'2021-07-15', exit:'', leaveStart:'2024-08-01', leaveEnd:'2024-08-15', avatar:''},
+            {id:3, name:'Mehmet Kaya', position:'Formen', department:'saha', status:'aktif', location:'Kocaeli', phone:'0541 222 33 44', email:'mehmet.kaya@example.com', start:'2020-01-10', exit:'', leaveStart:'', leaveEnd:'', avatar:''},
+            {id:4, name:'Zeynep Çelik', position:'İş Güvenliği Uzmanı', department:'isguvenligi', status:'aktif', location:'İzmir', phone:'0533 555 66 77', email:'zeynep.celik@example.com', start:'2023-05-20', exit:'', leaveStart:'', leaveEnd:'', avatar:''},
+            {id:5, name:'Eren Koç', position:'Tekniker', department:'mekanik', status:'ayrildi', location:'Bursa', phone:'0530 999 88 77', email:'eren.koc@example.com', start:'2019-09-01', exit:'2023-12-31', leaveStart:'', leaveEnd:'', avatar:''}
+        ];
+        let data = loadData();
+
+        const grid = document.getElementById('personnelGrid');
+
+        document.querySelectorAll('.filter-input,.filter-select').forEach(el=> el.addEventListener('input', render));
+
+        function render(){
+            const dep = document.getElementById('filterDepartment').value;
+            const pos = document.getElementById('filterPosition').value;
+            const st = document.getElementById('filterStatus').value;
+            const q = (document.getElementById('filterQuery').value||'').toLocaleLowerCase('tr');
+
+            const list = data.filter(p=>
+                (!dep || p.department===dep) &&
+                (!pos || normalize(p.position)===pos) &&
+                (!st || p.status===st) &&
+                (!q || (p.name||'').toLocaleLowerCase('tr').includes(q) || (p.position||'').toLocaleLowerCase('tr').includes(q) || (p.email||'').toLocaleLowerCase('tr').includes(q))
+            );
+
+            grid.innerHTML = list.map(p=>card(p)).join('') || '<div class="mini">Kriterlere uygun personel bulunamadı.</div>';
+        }
+
+        function card(p){
+            const status = p.status==='aktif' ? '<span class="badge success">Aktif</span>' : (p.status==='izinde' ? '<span class="badge warning">İzinde</span>' : '<span class="badge info">Ayrıldı</span>');
+            return `<article class="person-card">
+                <div class="avatar">${initials(p.name)}</div>
+                <div class="person-body">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                        <div class="person-name">${p.name}</div>
+                        ${status}
+                    </div>
+                    <div class="meta">
+                        <div><i class="fa-solid fa-id-badge"></i> ${p.position}</div>
+                        <div><i class="fa-solid fa-envelope"></i> ${p.email}</div>
+                        <div><i class="fa-solid fa-phone"></i> ${p.phone}</div>
+                    </div>
+                    <div class="card-actions">
+                        <div class="btn-group">
+                            <button class="details-btn" onclick="openDrawer(${p.id})"><i class="fa-solid fa-eye"></i> Detay</button>
+                            <button class="details-btn" onclick="openEditForm(${p.id})"><i class="fa-solid fa-pen"></i> Düzenle</button>
+                            <button class="details-btn" onclick="deletePerson(${p.id})"><i class="fa-solid fa-trash"></i> Sil</button>
+                        </div>
+                    </div>
+                </div>
+            </article>`
+        }
+
+        function initials(name){
+            return name.split(' ').map(p=>p[0]).slice(0,2).join('').toUpperCase();
+        }
+
+        function normalize(pos){
+            if(!pos) return '';
+            const map = {
+                'Şantiye Mühendisi':'muhendis', 'Formen':'forman', 'İş Güvenliği Uzmanı':'isguvenligi', 'Mimar':'mimar', 'Tekniker':'tekniker', 'İdari Personel':'idari'
+            };
+            return map[pos] || pos.toLowerCase();
+        }
+
+        function openDrawer(id){
+            const p = data.find(x=>x.id===id);
+            document.getElementById('dwTitle').textContent = p.name;
+            document.getElementById('dwBody').innerHTML = `
+                <div class="kv"><span>Pozisyon</span><div>${p.position}</div></div>
+                <div class="kv"><span>Departman</span><div>${depLabel(p.department)}</div></div>
+                <div class="kv"><span>Telefon</span><div>${p.phone}</div></div>
+                <div class="kv"><span>E-posta</span><div>${p.email}</div></div>
+                <div class="kv"><span>İşe Başlangıç</span><div>${p.start||'-'}</div></div>
+                ${p.status==='ayrildi' && p.exit ? `<div class="kv"><span>Çıkış Tarihi</span><div>${p.exit}</div></div>` : ''}
+                ${p.status==='izinde' && (p.leaveStart||p.leaveEnd) ? `<div class=\"kv\"><span>İzne Çıkış</span><div>${p.leaveStart||'-'}</div></div><div class=\"kv\"><span>İzne Dönüş</span><div>${p.leaveEnd||'-'}</div></div>` : ''}
+            `;
+            document.getElementById('drawer').classList.add('open');
+        }
+
+        function depLabel(d){
+            const map={saha:'Saha', ofis:'Ofis', satinalma:'Satınalma', insaat:'İnşaat', mekanik:'Mekanik', elektrik:'Elektrik', isguvenligi:'İş Güvenliği'};
+            return map[d]||d;
+        }
+
+        function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); }
+
+        // Storage helpers
+        function loadData(){
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if(!raw){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; }
+                const arr = JSON.parse(raw);
+                if(!Array.isArray(arr) || arr.length===0){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; }
+                return arr;
+            } catch(e){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; }
+        }
+        function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+        // Form state
+        let editId = null;
+        function openCreateForm(){
+            editId = null;
+            document.getElementById('fmTitle').textContent = 'Yeni Personel';
+            fillForm({name:'', position:'', department:'saha', status:'aktif', phone:'', email:'', start:'', exit:'', leaveStart:'', leaveEnd:''});
+            document.getElementById('formModal').setAttribute('data-open','true');
+        }
+        function openEditForm(id){
+            const p = data.find(x=>x.id===id);
+            if(!p) return;
+            editId = id;
+            document.getElementById('fmTitle').textContent = 'Personeli Düzenle';
+            fillForm(p);
+            document.getElementById('formModal').setAttribute('data-open','true');
+        }
+        function closeForm(){ document.getElementById('formModal').setAttribute('data-open','false'); }
+        function fillForm(p){
+            document.getElementById('f_name').value = p.name||'';
+            document.getElementById('f_position').value = p.position||'';
+            document.getElementById('f_department').value = p.department||'saha';
+            document.getElementById('f_status').value = p.status||'aktif';
+            document.getElementById('f_phone').value = p.phone||'';
+            document.getElementById('f_email').value = p.email||'';
+            document.getElementById('f_start').value = p.start||'';
+            document.getElementById('f_exit').value = p.exit||'';
+            document.getElementById('f_leaveStart').value = p.leaveStart||'';
+            document.getElementById('f_leaveEnd').value = p.leaveEnd||'';
+            updateStatusFields();
+        }
+        function readForm(){
+            return {
+                name: (document.getElementById('f_name').value||'').trim(),
+                position: (document.getElementById('f_position').value||'').trim(),
+                department: document.getElementById('f_department').value,
+                status: document.getElementById('f_status').value,
+                phone: (document.getElementById('f_phone').value||'').trim(),
+                email: (document.getElementById('f_email').value||'').trim(),
+                start: document.getElementById('f_start').value,
+                exit: document.getElementById('f_status').value==='ayrildi' ? document.getElementById('f_exit').value : '',
+                leaveStart: document.getElementById('f_status').value==='izinde' ? document.getElementById('f_leaveStart').value : '',
+                leaveEnd: document.getElementById('f_status').value==='izinde' ? document.getElementById('f_leaveEnd').value : ''
+            };
+        }
+        function saveForm(){
+            const payload = readForm();
+            if(!payload.name || !payload.position){ alert('Ad ve pozisyon zorunludur.'); return; }
+            if(editId==null){
+                const newItem = { id: Date.now(), ...payload };
+                data.push(newItem);
+            } else {
+                const idx = data.findIndex(x=>x.id===editId);
+                if(idx>-1){ data[idx] = { ...data[idx], ...payload }; }
+            }
+            saveData();
+            closeForm();
+            render();
+        }
+
+        function deletePerson(id){
+            const p = data.find(x=>x.id===id);
+            const name = p ? p.name : 'kayıt';
+            if(!confirm(`${name} kaydını silmek istediğinize emin misiniz?`)) return;
+            data = data.filter(x=>x.id!==id);
+            saveData();
+            render();
+        }
+
+        // Status-based conditional fields
+        document.addEventListener('DOMContentLoaded', () => {
+            const st = document.getElementById('f_status');
+            if(st){ st.addEventListener('change', updateStatusFields); }
+        });
+        function updateStatusFields(){
+            const st = document.getElementById('f_status').value;
+            const exitEl = document.getElementById('exitField');
+            const leaveWrap = document.getElementById('leaveFields');
+            if(exitEl) exitEl.toggleAttribute('data-hidden', !(st==='ayrildi'));
+            if(leaveWrap) leaveWrap.toggleAttribute('data-hidden', !(st==='izinde'));
+        }
+
+        render();
+    </script>
+</body>
+</html>
+
+

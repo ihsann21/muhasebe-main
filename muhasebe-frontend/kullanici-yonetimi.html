@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Yönetimi - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Kullanıcı Yönetimi sayfası özel stilleri */
+        .user-section {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .user-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-table th {
+            background-color: var(--gray-50);
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .user-table td {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .user-table tr:hover {
+            background-color: var(--gray-50);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .user-email {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-inactive {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .role-admin {
+            background-color: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .role-user {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .role-viewer {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .btn-edit:hover {
+            background-color: #bfdbfe;
+        }
+
+        .btn-delete {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background-color: #fecaca;
+        }
+
+        .btn-toggle {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .btn-toggle:hover {
+            background-color: #e5e7eb;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text);
+            background-color: var(--white);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text);
+            background-color: var(--white);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .user-table {
+                font-size: 12px;
+            }
+            
+            .user-table th,
+            .user-table td {
+                padding: 8px 12px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="brand-info">
+                <h1>İnşaat Muhasebe PRO</h1>
+                <span class="version">Volass İnşaat</span>
+            </div>
+        </div>
+        
+        <nav class="main-menu">
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-book"></i>
+                <span>Tanımlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'">
+                <i class="fa-solid fa-right-left"></i>
+                <span>Hareketler</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span>Raporlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-life-ring"></i>
+                <span>Yardım</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-comments"></i>
+                <span>Mesajlar</span>
+            </button>
+            <button class="menu-item active">
+                <i class="fa-solid fa-cogs"></i>
+                <span>Bilgiler ve Yönetim</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Çıkış</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Quick Access Toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-home"></i>
+                <span>Ana Sayfa</span>
+            </button>
+            <button class="toolbar-item" onclick="window.location.href='firma-bilgileri.html'">
+                <i class="fa-solid fa-building"></i>
+                <span>Firma Bilgileri</span>
+            </button>
+            <button class="toolbar-item" onclick="window.location.href='program-ayarlari.html'">
+                <i class="fa-solid fa-sliders-h"></i>
+                <span>Program Ayarları</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header">
+            <h2>Kullanıcı Yönetimi</h2>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="openAddUserModal()">
+                    <i class="fa-solid fa-plus"></i>
+                    Yeni Kullanıcı
+                </button>
+            </div>
+        </div>
+
+        <!-- İstatistikler -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">4</div>
+                <div class="stat-label">Toplam Kullanıcı</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeUsers">3</div>
+                <div class="stat-label">Aktif Kullanıcı</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="adminUsers">1</div>
+                <div class="stat-label">Yönetici</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingUsers">1</div>
+                <div class="stat-label">Beklemede</div>
+            </div>
+        </div>
+
+        <!-- Kullanıcı Listesi -->
+        <div class="user-section">
+            <h3>
+                <i class="fa-solid fa-users"></i>
+                Kullanıcı Listesi
+            </h3>
+            
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Kullanıcı ara..." onkeyup="searchUsers(this.value)">
+            </div>
+
+            <table class="user-table" id="userTable">
+                <thead>
+                    <tr>
+                        <th>Kullanıcı</th>
+                        <th>Rol</th>
+                        <th>Durum</th>
+                        <th>Son Giriş</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Kullanıcılar JavaScript ile doldurulacak -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Kullanıcı Ekleme/Düzenleme Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Yeni Kullanıcı Ekle</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userName">Ad Soyad *</label>
+                    <input type="text" id="userName" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">E-posta *</label>
+                    <input type="email" id="userEmail" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPhone">Telefon</label>
+                    <input type="tel" id="userPhone" class="form-input">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userRole">Rol *</label>
+                    <select id="userRole" class="form-select" required>
+                        <option value="">Rol Seçiniz</option>
+                        <option value="admin">Yönetici</option>
+                        <option value="user">Kullanıcı</option>
+                        <option value="viewer">Görüntüleyici</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPassword">Şifre *</label>
+                    <input type="password" id="userPassword" class="form-input" required>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">İptal</button>
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span id="currentDateTime">Sunucu Tarihi: Yükleniyor...</span>
+            <span>•</span>
+            <span>Lisans: DEMO İNŞAAT</span>
+            <span>•</span>
+            <span>Kullanıcı: Ana Kullanıcı</span>
+        </div>
+    </footer>
+
+    <script>
+        let users = [
+            {
+                id: 1,
+                name: 'Ana Kullanıcı',
+                email: 'admin@volassinsaat.com',
+                phone: '+90 216 123 45 67',
+                role: 'admin',
+                status: 'active',
+                lastLogin: '2024-12-30 14:30'
+            },
+            {
+                id: 2,
+                name: 'Muhasebe Uzmanı',
+                email: 'muhasebe@volassinsaat.com',
+                phone: '+90 216 123 45 68',
+                role: 'user',
+                status: 'active',
+                lastLogin: '2024-12-30 09:15'
+            },
+            {
+                id: 3,
+                name: 'Proje Yöneticisi',
+                email: 'proje@volassinsaat.com',
+                phone: '+90 216 123 45 69',
+                role: 'user',
+                status: 'active',
+                lastLogin: '2024-12-29 16:45'
+            },
+            {
+                id: 4,
+                name: 'Sistem Yöneticisi',
+                email: 'sistem@volassinsaat.com',
+                phone: '+90 216 123 45 70',
+                role: 'viewer',
+                status: 'pending',
+                lastLogin: 'Hiç giriş yapmadı'
+            }
+        ];
+
+        let editingUserId = null;
+
+        // Tarih/saat güncelleme
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Europe/Istanbul'
+            };
+            
+            const dateTimeString = now.toLocaleString('tr-TR', options);
+            document.getElementById('currentDateTime').textContent = `Sunucu Tarihi: ${dateTimeString}`;
+        }
+
+        // Kullanıcı tablosunu doldur
+        function renderUsers(userList = users) {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+
+            userList.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">${user.name.charAt(0)}</div>
+                            <div class="user-details">
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="role-badge role-${user.role}">
+                            ${getRoleText(user.role)}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${user.status}">
+                            ${getStatusText(user.status)}
+                        </span>
+                    </td>
+                    <td>${user.lastLogin}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-edit" onclick="editUser(${user.id})" title="Düzenle">
+                                <i class="fa-solid fa-edit"></i>
+                            </button>
+                            <button class="btn-icon btn-toggle" onclick="toggleUserStatus(${user.id})" title="Durumu Değiştir">
+                                <i class="fa-solid fa-power-off"></i>
+                            </button>
+                            <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})" title="Sil">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateStats();
+        }
+
+        // Rol metni
+        function getRoleText(role) {
+            const roleTexts = {
+                admin: 'Yönetici',
+                user: 'Kullanıcı',
+                viewer: 'Görüntüleyici'
+            };
+            return roleTexts[role] || role;
+        }
+
+        // Durum metni
+        function getStatusText(status) {
+            const statusTexts = {
+                active: 'Aktif',
+                inactive: 'Pasif',
+                pending: 'Beklemede'
+            };
+            return statusTexts[status] || status;
+        }
+
+        // İstatistikleri güncelle
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('activeUsers').textContent = users.filter(u => u.status === 'active').length;
+            document.getElementById('adminUsers').textContent = users.filter(u => u.role === 'admin').length;
+            document.getElementById('pendingUsers').textContent = users.filter(u => u.status === 'pending').length;
+        }
+
+        // Kullanıcı arama
+        function searchUsers(query) {
+            const filteredUsers = users.filter(user => 
+                user.name.toLowerCase().includes(query.toLowerCase()) ||
+                user.email.toLowerCase().includes(query.toLowerCase())
+            );
+            renderUsers(filteredUsers);
+        }
+
+        // Modal açma/kapama
+        function openAddUserModal() {
+            editingUserId = null;
+            document.getElementById('modalTitle').textContent = 'Yeni Kullanıcı Ekle';
+            document.getElementById('userForm').reset();
+            document.getElementById('userModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('userModal').style.display = 'none';
+        }
+
+        // Kullanıcı düzenleme
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            editingUserId = userId;
+            document.getElementById('modalTitle').textContent = 'Kullanıcı Düzenle';
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userPhone').value = user.phone;
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userPassword').value = ''; // Şifre alanını boş bırak
+            document.getElementById('userModal').style.display = 'block';
+        }
+
+        // Kullanıcı durumu değiştirme
+        function toggleUserStatus(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            if (user.status === 'active') {
+                user.status = 'inactive';
+            } else {
+                user.status = 'active';
+            }
+
+            renderUsers();
+            saveUsers();
+        }
+
+        // Kullanıcı silme
+        function deleteUser(userId) {
+            if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
+                users = users.filter(u => u.id !== userId);
+                renderUsers();
+                saveUsers();
+            }
+        }
+
+        // Form gönderme
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                phone: document.getElementById('userPhone').value,
+                role: document.getElementById('userRole').value,
+                password: document.getElementById('userPassword').value
+            };
+
+            if (editingUserId) {
+                // Kullanıcı güncelleme
+                const user = users.find(u => u.id === editingUserId);
+                if (user) {
+                    user.name = formData.name;
+                    user.email = formData.email;
+                    user.phone = formData.phone;
+                    user.role = formData.role;
+                    if (formData.password) {
+                        // Şifre güncelleme (gerçek uygulamada hash'lenecek)
+                    }
+                }
+            } else {
+                // Yeni kullanıcı ekleme
+                const newUser = {
+                    id: Math.max(...users.map(u => u.id)) + 1,
+                    ...formData,
+                    status: 'pending',
+                    lastLogin: 'Hiç giriş yapmadı'
+                };
+                users.push(newUser);
+            }
+
+            renderUsers();
+            saveUsers();
+            closeModal();
+        });
+
+        // Kullanıcıları kaydet
+        function saveUsers() {
+            localStorage.setItem('kullanicilar', JSON.stringify(users));
+        }
+
+        // Kullanıcıları yükle
+        function loadUsers() {
+            const savedUsers = localStorage.getItem('kullanicilar');
+            if (savedUsers) {
+                users = JSON.parse(savedUsers);
+            }
+        }
+
+        // Modal dışına tıklayınca kapat
+        window.onclick = function(event) {
+            const modal = document.getElementById('userModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            loadUsers();
+            renderUsers();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Program Ayarları - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Program Ayarları sayfası özel stilleri */
+        .settings-section {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .settings-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .setting-description {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background-color: var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background-color: var(--green);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(26px);
+        }
+
+        /* Select Dropdown */
+        .setting-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text);
+            background-color: var(--white);
+            min-width: 150px;
+        }
+
+        .setting-select:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        /* Input Field */
+        .setting-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text);
+            background-color: var(--white);
+            min-width: 120px;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        /* Color Picker */
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .color-picker input[type="color"] {
+            width: 100%;
+            height: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Button Group */
+        .button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .warning-box .warning-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .warning-box .warning-icon {
+            color: #d97706;
+            font-size: 18px;
+        }
+
+        .warning-box .warning-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #92400e;
+        }
+
+        .warning-box .warning-text {
+            font-size: 14px;
+            color: #a16207;
+            line-height: 1.5;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 1px solid #10b981;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .success-box .success-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .success-box .success-icon {
+            color: #059669;
+            font-size: 18px;
+        }
+
+        .success-box .success-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        .success-box .success-text {
+            font-size: 14px;
+            color: #047857;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .setting-control {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="brand-info">
+                <h1>İnşaat Muhasebe PRO</h1>
+                <span class="version">Volass İnşaat</span>
+            </div>
+        </div>
+        
+        <nav class="main-menu">
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-book"></i>
+                <span>Tanımlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'">
+                <i class="fa-solid fa-right-left"></i>
+                <span>Hareketler</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span>Raporlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-life-ring"></i>
+                <span>Yardım</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-comments"></i>
+                <span>Mesajlar</span>
+            </button>
+            <button class="menu-item active">
+                <i class="fa-solid fa-cogs"></i>
+                <span>Bilgiler ve Yönetim</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Çıkış</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Quick Access Toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-home"></i>
+                <span>Ana Sayfa</span>
+            </button>
+            <button class="toolbar-item" onclick="window.location.href='firma-bilgileri.html'">
+                <i class="fa-solid fa-building"></i>
+                <span>Firma Bilgileri</span>
+            </button>
+            <button class="toolbar-item" onclick="window.location.href='kullanici-yonetimi.html'">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Kullanıcı Yönetimi</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header">
+            <h2>Program Ayarları</h2>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="resetSettings()">
+                    <i class="fa-solid fa-refresh"></i>
+                    Varsayılana Dön
+                </button>
+            </div>
+        </div>
+
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <div class="warning-header">
+                <i class="fa-solid fa-exclamation-triangle warning-icon"></i>
+                <span class="warning-title">Dikkat</span>
+            </div>
+            <div class="warning-text">
+                Program ayarlarında yapacağınız değişiklikler tüm kullanıcıları etkileyecektir. Değişiklikleri yapmadan önce lütfen dikkatli olun.
+            </div>
+        </div>
+
+        <!-- Success Box -->
+        <div class="success-box" id="successBox">
+            <div class="success-header">
+                <i class="fa-solid fa-check-circle success-icon"></i>
+                <span class="success-title">Başarılı</span>
+            </div>
+            <div class="success-text">
+                Ayarlarınız başarıyla kaydedildi ve uygulandı.
+            </div>
+        </div>
+
+
+
+        <!-- Yedekleme Ayarları -->
+        <div class="settings-section">
+            <h3>
+                <i class="fa-solid fa-database"></i>
+                Yedekleme Ayarları
+            </h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Otomatik Yedekleme</div>
+                    <div class="setting-description">Veriler otomatik olarak yedeklensin</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="toggleSetting(this)" data-setting="autoBackup"></div>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Yedekleme Sıklığı</div>
+                    <div class="setting-description">Otomatik yedekleme ne sıklıkla yapılsın</div>
+                </div>
+                <div class="setting-control">
+                    <select class="setting-select" onchange="changeSetting('backupFrequency', this.value)">
+                        <option value="daily">Günlük</option>
+                        <option value="weekly" selected>Haftalık</option>
+                        <option value="monthly">Aylık</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-title">Yedek Saklama Süresi</div>
+                    <div class="setting-description">Yedekler ne kadar süre saklanacak (gün)</div>
+                </div>
+                <div class="setting-control">
+                    <input type="number" class="setting-input" value="30" min="7" max="365" onchange="changeSetting('backupRetention', this.value)">
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;">
+            <button class="btn btn-outline" onclick="cancelChanges()">
+                <i class="fa-solid fa-times"></i>
+                İptal
+            </button>
+            <button class="btn btn-primary" onclick="saveSettings()">
+                <i class="fa-solid fa-save"></i>
+                Kaydet
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span id="currentDateTime">Sunucu Tarihi: Yükleniyor...</span>
+            <span>•</span>
+            <span>Lisans: DEMO İNŞAAT</span>
+            <span>•</span>
+            <span>Kullanıcı: Ana Kullanıcı</span>
+        </div>
+    </footer>
+
+    <script>
+        let settings = {
+            autoBackup: true,
+            backupFrequency: 'weekly',
+            backupRetention: 30
+        };
+
+        // Tarih/saat güncelleme
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Europe/Istanbul'
+            };
+            
+            const dateTimeString = now.toLocaleString('tr-TR', options);
+            document.getElementById('currentDateTime').textContent = `Sunucu Tarihi: ${dateTimeString}`;
+        }
+
+        // Toggle switch işlevi
+        function toggleSetting(element) {
+            element.classList.toggle('active');
+            const settingName = element.getAttribute('data-setting');
+            settings[settingName] = element.classList.contains('active');
+        }
+
+        // Ayar değiştirme
+        function changeSetting(settingName, value) {
+            settings[settingName] = value;
+        }
+
+        // Ayarları kaydet
+        function saveSettings() {
+            localStorage.setItem('programAyarlari', JSON.stringify(settings));
+            
+            // Başarı mesajını göster
+            const successBox = document.getElementById('successBox');
+            successBox.style.display = 'block';
+            
+            // 3 saniye sonra gizle
+            setTimeout(() => {
+                successBox.style.display = 'none';
+            }, 3000);
+        }
+
+        // Ayarları sıfırla
+        function resetSettings() {
+            if (confirm('Tüm ayarlar varsayılan değerlerine döndürülecek. Devam etmek istiyor musunuz?')) {
+                localStorage.removeItem('programAyarlari');
+                location.reload();
+            }
+        }
+
+
+
+        function cancelChanges() {
+            if (confirm('Değişiklikler kaydedilmedi. Sayfadan çıkmak istiyor musunuz?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            
+            // Kaydedilmiş ayarları yükle
+            const savedSettings = localStorage.getItem('programAyarlari');
+            if (savedSettings) {
+                settings = { ...settings, ...JSON.parse(savedSettings) };
+                
+                // UI'yi güncelle
+                Object.keys(settings).forEach(key => {
+                    const element = document.querySelector(`[data-setting="${key}"]`);
+                    if (element && element.classList.contains('toggle-switch')) {
+                        element.classList.toggle('active', settings[key]);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

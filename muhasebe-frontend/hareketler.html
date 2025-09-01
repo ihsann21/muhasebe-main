@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hareketler - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Hareketler sayfası özel stilleri */
+        .filter-section {
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .filter-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text);
+            background-color: var(--white);
+            transition: all 0.2s ease;
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .btn-filter {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--white);
+            color: var(--text);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-filter:hover {
+            background-color: var(--gray-50);
+            border-color: var(--green);
+        }
+
+        .btn-filter.active {
+            background-color: var(--green);
+            color: var(--white);
+            border-color: var(--green);
+        }
+
+        /* Excel butonları için hover efektini devre dışı bırak */
+        .btn[onclick*="export"]:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--green), var(--border));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            background-color: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.16s ease;
+        }
+
+        .timeline-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 24px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--green);
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--green);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .timeline-time {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        .timeline-clock {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-action {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timeline-description {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .timeline-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            background-color: var(--gray-50);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--white);
+        }
+
+        .action-icon.create { background-color: #10b981; }
+        .action-icon.update { background-color: #f59e0b; }
+        .action-icon.delete { background-color: #ef4444; }
+        .action-icon.cancel { background-color: #f59e0b; }
+        .action-icon.login { background-color: var(--green); }
+        .action-icon.logout { background-color: #6b7280; }
+        .action-icon.export { background-color: #8b5cf6; }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-success { background-color: #dcfce7; color: #166534; }
+        .status-warning { background-color: #fef3c7; color: #92400e; }
+        .status-error { background-color: #fee2e2; color: #991b1b; }
+
+        /* Hareket türü rozet renkleri */
+        .badge-create { background-color: #dcfce7; color: #166534; }
+        .badge-update { background-color: #dbeafe; color: #1d4ed8; }
+        .badge-delete { background-color: #fee2e2; color: #991b1b; }
+        .badge-cancel { background-color: #fef3c7; color: #92400e; }
+        .badge-login  { background-color: #e6f4ea; color: #166534; }
+        .badge-logout { background-color: #e5e7eb; color: #374151; }
+        .badge-export { background-color: #ede9fe; color: #6d28d9; }
+
+        .filter-hint {
+            font-size: 12px;
+            color: var(--muted);
+            margin: 4px 0 0 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .filter-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-actions {
+                justify-content: stretch;
+            }
+            
+            .btn-filter {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .timeline {
+                padding-left: 20px;
+            }
+            
+            .timeline::before {
+                left: 10px;
+            }
+            
+            .timeline-item::before {
+                left: -16px;
+            }
+            
+            .timeline-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            
+            .timeline-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="brand-info">
+                <h1>İnşaat Muhasebe PRO</h1>
+                <span class="version">Volass İnşaat</span>
+            </div>
+        </div>
+        
+        <nav class="main-menu">
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-book"></i>
+                <span>Tanımlar</span>
+            </button>
+            <button class="menu-item active">
+                <i class="fa-solid fa-right-left"></i>
+                <span>Hareketler</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-chart-bar"></i>
+                <span>Raporlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-life-ring"></i>
+                <span>Yardım</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-comments"></i>
+                <span>Mesajlar</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-cogs"></i>
+                <span>Bilgiler ve Yönetim</span>
+            </button>
+            <button class="menu-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Çıkış</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Quick Access Toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-home"></i>
+                <span>Ana Sayfa</span>
+            </button>
+            
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-header">
+            <h2>Sistem Hareketleri</h2>
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="refreshLogs()">
+                    <i class="fa-solid fa-refresh"></i>
+                    Yenile
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h3>Filtreleme ve Sıralama</h3>
+                <span class="status-badge status-success" id="logCount">Bu ay: 0 hareket</span>
+            </div>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="startDate">Başlangıç Tarihi (Maksimum 7 gün)</label>
+                    <input type="date" id="startDate" class="filter-input">
+                    <p class="filter-hint">Sadece bir aya ait veriler gösterilir. Örnek: 01.01.2025 - 31.01.2025 arasını seçebilirsiniz.</p>
+                </div>
+                <div class="filter-group">
+                    <label for="endDate">Bitiş Tarihi</label>
+                    <input type="date" id="endDate" class="filter-input">
+                    <p class="filter-hint">Lütfen başlangıç ve bitiş tarihlerini aynı ay içinde seçiniz.</p>
+                </div>
+                <div class="filter-group">
+                    <label for="actionType">Hareket Türü</label>
+                    <select id="actionType" class="filter-input">
+                        <option value="">Tümü</option>
+                        <option value="create">Oluşturma</option>
+                        <option value="update">Güncelleme</option>
+                        <option value="delete">Silme</option>
+                        <option value="cancel">İptal</option>
+                        <option value="login">Giriş</option>
+                        <option value="logout">Çıkış</option>
+                        <option value="export">Dışa Aktarım</option>
+                    </select>
+                </div>
+                
+            </div>
+            
+            <div class="filter-actions">
+                <button class="btn-filter" id="sortNewest" onclick="setSortOrder('newest')">
+                    <i class="fa-solid fa-arrow-down"></i>
+                    Yeniden Eskiye
+                </button>
+                <button class="btn-filter" id="sortOldest" onclick="setSortOrder('oldest')">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    Eskiden Yeniye
+                </button>
+                <button class="btn btn-outline" onclick="exportAllLogs()">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Tümünü Excel'e Aktar
+                </button>
+                <button class="btn btn-outline" onclick="exportFilteredLogs()">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Filtreleneni Excel'e Aktar
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>Hareketler yükleniyor...</p>
+        </div>
+
+        <!-- Timeline Container -->
+        <div class="timeline-container" id="timelineContainer">
+            <div class="timeline" id="timeline">
+                <!-- Log items will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <h3>Henüz hareket bulunamadı</h3>
+            <p>Seçilen tarih aralığında herhangi bir sistem hareketi bulunmuyor.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <span id="currentDateTime">Sunucu Tarihi: Yükleniyor...</span>
+            <span>•</span>
+            <span>Lisans: DEMO İNŞAAT</span>
+            <span>•</span>
+            <span>Kullanıcı: Ana Kullanıcı</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="hareketler.js"></script>
+</body>
+</html>

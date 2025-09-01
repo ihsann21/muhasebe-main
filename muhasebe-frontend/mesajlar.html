@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesajlar - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chat-layout { display: grid; grid-template-columns: 300px 1fr; gap: 16px; }
+        .chat-sidebar { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 12px; height: calc(100vh - 220px); overflow: auto; }
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .chat-search { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
+        .conversation { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; border:1px solid transparent; transition: all .16s ease; }
+        .conversation:hover { background: var(--gray-50); border-color: var(--green); box-shadow: var(--shadow); }
+        .conv-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: #fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+        .conv-name { font-weight:600; color: var(--text); }
+        .chat-window { background: var(--white); border: 1px solid var(--border); border-radius: 12px; display:flex; flex-direction:column; height: calc(100vh - 220px); }
+        .conv-top { padding: 12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+        .conv-title { font-weight:600; color: var(--text); }
+        .conv-actions { display:flex; gap:8px; }
+        .icon-btn { border:1px solid var(--border); background:#fff; width:34px; height:34px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .icon-btn:focus { outline: none; }
+        .messages { padding: 16px; overflow-y: auto; flex: 1; }
+        .msg { max-width: 70%; margin-bottom: 10px; padding: 10px 12px; border-radius: 10px; box-shadow: var(--shadow); }
+        .msg.me { background: #dcfce7; margin-left: auto; }
+        .msg.them { background: #f3f4f6; }
+        .msg small { display:block; color: var(--muted); margin-top: 6px; font-size: 11px; }
+        .composer { border-top: 1px solid var(--border); padding: 12px; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; }
+        .file-btn { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 8px 10px; cursor: pointer; height: 36px; display:flex; align-items:center; }
+        .file-btn:hover { border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.08); }
+        .input { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; width: 100%; height: 36px; }
+        .input::placeholder { color: var(--muted); font-style: italic; }
+        .input:hover { border-color: var(--green); }
+        .input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.10); }
+        .send-btn { background: var(--green); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; height: 36px; display:flex; align-items:center; gap:6px; font-size:13px; }
+        .send-btn:hover { filter: brightness(0.95); box-shadow: var(--shadow); }
+        .file-list { display:flex; gap:8px; flex-wrap: wrap; margin-top: 8px; }
+        .file-chip { border:1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 12px; display:flex; align-items:center; gap:6px; background:#fff; }
+        @media(max-width: 900px) { .chat-layout{ grid-template-columns: 1fr; } .chat-sidebar{ height:auto; } .chat-window{ height:auto; min-height:60vh; } }
+    </style>
+</head>
+<body>
+    <!-- Topbar (Aynı header) -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo"><i class="fa-solid fa-gear"></i></div>
+            <div class="brand-info">
+                <h1>İnşaat Muhasebe PRO</h1>
+                <span class="version">Volass İnşaat</span>
+            </div>
+        </div>
+        <nav class="main-menu">
+            <button class="menu-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-book"></i><span>Tanımlar</span></button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'"><i class="fa-solid fa-right-left"></i><span>Hareketler</span></button>
+            <button class="menu-item"><i class="fa-solid fa-chart-bar"></i><span>Raporlar</span></button>
+            <button class="menu-item"><i class="fa-solid fa-life-ring"></i><span>Yardım</span></button>
+            <button class="menu-item active" onclick="window.location.href='mesajlar.html'"><i class="fa-solid fa-comments"></i><span>Mesajlar</span></button>
+            <button class="menu-item" onclick="window.location.href='program-ayarlari.html'"><i class="fa-solid fa-cogs"></i><span>Bilgiler ve Yönetim</span></button>
+            <button class="menu-item"><i class="fa-solid fa-right-from-bracket"></i><span>Çıkış</span></button>
+        </nav>
+    </header>
+
+    <!-- Quick Access Toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-home"></i>
+                <span>Ana Sayfa</span>
+            </button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="content-header"><h2>Mesajlar</h2></div>
+        <div class="chat-layout">
+            <aside class="chat-sidebar">
+                <div class="chat-header">
+                    <input type="text" class="chat-search" placeholder="Kullanıcı veya grup ara..." oninput="filterConversations(this.value)">
+                </div>
+                <div id="conversationList"></div>
+            </aside>
+            <section class="chat-window">
+                <div class="conv-top">
+                    <div class="conv-title" id="activeName">Sohbet</div>
+                    <div class="conv-actions">
+                        <button class="icon-btn" onclick="clearConversation()" title="Mesajları temizle" onmouseover="this.style.borderColor='var(--green)'; this.style.boxShadow='0 0 0 3px rgba(46,125,50,.12)';" onmouseout="this.style.borderColor='var(--border)'; this.style.boxShadow='none';"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="messages" id="messages"></div>
+                <div class="composer">
+                    <label class="file-btn" title="Dosya ekle">
+                        <i class="fa-solid fa-paperclip"></i>
+                        <input type="file" id="fileInput" style="display:none" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+                    </label>
+                    <div>
+                        <input id="messageInput" class="input" placeholder="Bir mesaj yazın (Enter ile gönderin)" />
+                        <div id="filePreview" class="file-list"></div>
+                    </div>
+                    <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i><span class="send-text">Gönder</span></button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content"><span>Sunucu Tarihi: 16.07.2018</span><span>•</span><span>Lisans: DEMO İNŞAAT</span><span>•</span><span>Kullanıcı: Ana Kullanıcı</span></div>
+    </footer>
+
+    <script>
+        const currentUser = 'Ana Kullanıcı';
+        const STORAGE_KEY = 'mesajlar_v1';
+        const conversations = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+        const conversationList = document.getElementById('conversationList');
+        const messagesEl = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        let activeConvId = null;
+
+        const demoUsers = ['Muhasebe Uzmanı','Proje Yöneticisi','Sistem Yöneticisi'];
+        if (conversations.length === 0) {
+            demoUsers.forEach((u, idx)=>{
+                conversations.push({ id: idx+1, name: u, members:[currentUser,u], msgs:[] });
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+        } else {
+            // Eski varsayılan mesajı temizle
+            let changed = false;
+            conversations.forEach(c=>{
+                const before = c.msgs.length;
+                c.msgs = (c.msgs||[]).filter(m=>m.text !== 'Merhaba, nasıl yardımcı olabilirim?');
+                if (before !== c.msgs.length) changed = true;
+            });
+            if (changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+        }
+
+        function renderConversations(list = conversations){
+            conversationList.innerHTML = list.map(c=>`
+                <div class="conversation" onclick="openConversation(${c.id})">
+                    <div class="conv-avatar">${c.name.charAt(0)}</div>
+                    <div>
+                        <div class="conv-name">${c.name}</div>
+                        <div class="conv-last" style="color:var(--muted); font-size:12px;">${(c.msgs[c.msgs.length-1]?.text||'Dosya gönderildi')}</div>
+                    </div>
+                </div>
+            `).join('');
+            if(!activeConvId && conversations[0]) openConversation(conversations[0].id);
+        }
+
+        function filterConversations(q){
+            q = q.toLowerCase();
+            renderConversations(conversations.filter(c=>c.name.toLowerCase().includes(q)));
+        }
+
+        function openConversation(id){
+            activeConvId = id;
+            const conv = conversations.find(c=>c.id===id);
+            messagesEl.innerHTML = conv.msgs.map(m=>renderMsg(m)).join('');
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+            document.getElementById('activeName').textContent = conv.name;
+        }
+
+        function renderMsg(m){
+            const date = new Date(m.ts).toLocaleString('tr-TR');
+            const files = (m.files||[]).map(f=>`<div class=\"file-chip\"><i class=\"fa-solid ${iconFor(f.name)}\"></i>${f.name}</div>`).join('');
+            return `<div class="msg ${m.from===currentUser?'me':'them'}">
+                <div>${m.text||''}</div>
+                <div class="file-list">${files}</div>
+                <small>${m.from} • ${date}</small>
+            </div>`
+        }
+
+        function iconFor(name){
+            const ext = name.split('.').pop().toLowerCase();
+            if(['png','jpg','jpeg'].includes(ext)) return 'fa-image';
+            if(ext==='pdf') return 'fa-file-pdf';
+            if(['xls','xlsx'].includes(ext)) return 'fa-file-excel';
+            if(['doc','docx'].includes(ext)) return 'fa-file-word';
+            return 'fa-file';
+        }
+
+        fileInput.addEventListener('change', ()=>{
+            filePreview.innerHTML = Array.from(fileInput.files).map(f=>`<div class=\"file-chip\"><i class=\"fa-solid ${iconFor(f.name)}\"></i>${f.name}</div>`).join('');
+        });
+
+        function sendMessage(){
+            const text = messageInput.value.trim();
+            const files = Array.from(fileInput.files||[]);
+            if(!text && files.length===0) return;
+            const conv = conversations.find(c=>c.id===activeConvId);
+            conv.msgs.push({from: currentUser, text, ts: Date.now(), files: files.map(f=>({name:f.name, type:f.type}))});
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+            messageInput.value=''; fileInput.value=''; filePreview.innerHTML='';
+            openConversation(activeConvId);
+        }
+
+        // Enter ile gönder, Shift+Enter yeni satır
+        messageInput.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); }
+        });
+
+        function clearConversation(){
+            if(!activeConvId) return; if(!confirm('Sohbetteki tüm mesajlar silinsin mi?')) return;
+            const conv = conversations.find(c=>c.id===activeConvId); conv.msgs = [];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(conversations));
+            openConversation(activeConvId);
+        }
+
+        renderConversations();
+    </script>
+</body>
+</html>
+

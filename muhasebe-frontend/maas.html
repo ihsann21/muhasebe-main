@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maaş - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filters { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .filter-input, .filter-select { border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:14px; }
+        .filter-input:focus, .filter-select:focus { outline:none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.10); }
+        .salary-grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); }
+        .salary-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; transition:.16s; }
+        .salary-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+        .meta { display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+        .badge { padding:3px 8px; border-radius:999px; border:1px solid var(--border); font-size:12px; }
+        .badge.success { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+        .badge.warning { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+        .drawer { position: fixed; right: -480px; top:0; width: 420px; max-width:95vw; height: 100vh; background:#fff; border-left:1px solid var(--border); box-shadow: -10px 0 20px rgba(0,0,0,.08); transition:right .2s ease; z-index:200; display:flex; flex-direction:column; }
+        .drawer.open { right:0; }
+        .drawer-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .drawer-body { padding:16px; overflow:auto; display:grid; gap:12px; }
+        .kv { display:grid; grid-template-columns: 140px 1fr; gap:6px; font-size:14px; }
+        .kv span { color:var(--muted); }
+        .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.15); display:none; align-items:center; justify-content:center; z-index:300; }
+        .modal-backdrop[data-open="true"]{ display:flex; }
+        .modal { width:720px; max-width:95vw; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow-lg); display:flex; flex-direction:column; }
+        .modal-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .modal-body { padding:16px; display:grid; gap:12px; }
+        .modal-actions { padding:12px 16px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
+        .input-row { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .field { display:grid; gap:6px; }
+        .field-label { font-size:12px; color:var(--muted); }
+        .details-btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:6px 10px; cursor:pointer; }
+        .details-btn:hover { border-color: var(--green); }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo"><i class="fa-solid fa-gear"></i></div>
+            <div class="brand-info"><h1>İnşaat Muhasebe PRO</h1><span class="version">Volass İnşaat</span></div>
+        </div>
+        <nav class="main-menu">
+            <button class="menu-item active" onclick="window.location.href='index.html'"><i class="fa-solid fa-book"></i><span>Tanımlar</span></button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'"><i class="fa-solid fa-right-left"></i><span>Hareketler</span></button>
+            <button class="menu-item"><i class="fa-solid fa-chart-bar"></i><span>Raporlar</span></button>
+            <button class="menu-item"><i class="fa-solid fa-life-ring"></i><span>Yardım</span></button>
+            <button class="menu-item" onclick="window.location.href='mesajlar.html'"><i class="fa-solid fa-comments"></i><span>Mesajlar</span></button>
+            <button class="menu-item" onclick="window.location.href='program-ayarlari.html'"><i class="fa-solid fa-cogs"></i><span>Bilgiler ve Yönetim</span></button>
+            <button class="menu-item"><i class="fa-solid fa-right-from-bracket"></i><span>Çıkış</span></button>
+        </nav>
+    </header>
+
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-home"></i><span>Ana Sayfa</span></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="content-header"><h2>Maaş</h2><div class="header-actions"><button class="btn btn-primary" onclick="openCreateForm()"><i class="fa-solid fa-plus"></i> Yeni Bordro</button></div></div>
+
+        <section class="filters">
+            <div class="field"><label class="field-label" for="filterYear">Yıl</label><select id="filterYear" class="filter-select"></select></div>
+            <div class="field"><label class="field-label" for="filterMonth">Ay</label><select id="filterMonth" class="filter-select"></select></div>
+            <div class="field"><label class="field-label" for="filterStatus">Durum</label>
+                <select id="filterStatus" class="filter-select" title="Durum"><option value="">Tümü</option><option value="odendi">Ödendi</option><option value="bekliyor">Bekliyor</option></select>
+            </div>
+            <div class="field"><label class="field-label" for="filterQuery">Arama</label><input id="filterQuery" class="filter-input" placeholder="Personel veya açıklama"></div>
+        </section>
+
+        <section id="salaryGrid" class="salary-grid"></section>
+    </main>
+
+    <aside id="drawer" class="drawer" aria-hidden="true"><div class="drawer-header"><div class="modal-title" id="dwTitle">Bordro Detayı</div><button class="details-btn" onclick="closeDrawer()"><i class="fa-solid fa-times"></i> Kapat</button></div><div class="drawer-body" id="dwBody"></div></aside>
+
+    <div id="formModal" class="modal-backdrop" data-open="false">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fmTitle">
+            <div class="modal-header"><div class="modal-title" id="fmTitle">Yeni Bordro</div><button class="details-btn" onclick="closeForm()"><i class="fa-solid fa-times"></i> Kapat</button></div>
+            <div class="modal-body">
+                <div class="input-row">
+                    <input id="f_person" class="filter-input input-sm" placeholder="Personel">
+                    <div class="field"><label class="field-label" for="f_year">Yıl</label><select id="f_year" class="filter-select"></select></div>
+                    <div class="field"><label class="field-label" for="f_month">Ay</label><select id="f_month" class="filter-select"></select></div>
+                    <div class="field"><label class="field-label" for="f_gross">Brüt Maaş</label><input id="f_gross" class="filter-input" type="number" step="0.01" placeholder="Brüt"></div>
+                    <div class="field"><label class="field-label" for="f_net">Net Maaş</label><input id="f_net" class="filter-input" type="number" step="0.01" placeholder="Net"></div>
+                    <select id="f_status" class="filter-select" title="Durum"><option value="bekliyor">Bekliyor</option><option value="odendi">Ödendi</option></select>
+                </div>
+                <textarea id="f_note" class="filter-input" rows="3" placeholder="Not"></textarea>
+            </div>
+            <div class="modal-actions"><button class="btn btn-outline" onclick="closeForm()">İptal</button><button class="btn btn-primary" onclick="saveForm()"><i class="fa-solid fa-save"></i> Kaydet</button></div>
+        </div>
+    </div>
+
+    <footer class="footer"><div class="footer-content"><span>Sunucu Tarihi: 16.07.2018</span><span>•</span><span>Lisans: DEMO İNŞAAT</span><span>•</span><span>Kullanıcı: Ana Kullanıcı</span></div></footer>
+
+    <script>
+        const STORAGE_KEY='salaries';
+        const SEED=[
+            {id:1, person:'Ahmet Yılmaz', month:'2025-08', gross:45000, net:38500, status:'odendi', note:''},
+            {id:2, person:'Elif Demir', month:'2025-08', gross:42000, net:36000, status:'bekliyor', note:'Avans bekliyor'}
+        ];
+        let data=loadData();
+        const grid=document.getElementById('salaryGrid');
+        document.querySelectorAll('.filter-input,.filter-select').forEach(el=>el.addEventListener('input',render));
+        function render(){
+            const year=document.getElementById('filterYear').value;
+            const mon=document.getElementById('filterMonth').value;
+            const st=document.getElementById('filterStatus').value;
+            const q=(document.getElementById('filterQuery').value||'').toLocaleLowerCase('tr');
+            const list=data.filter(p=> (!mon||p.month===`${year}-${mon}`)&&(!st||p.status===st)&&(!q||(p.person||'').toLocaleLowerCase('tr').includes(q)||(p.note||'').toLocaleLowerCase('tr').includes(q)) );
+            grid.innerHTML=list.map(p=>card(p)).join('')||'<div class="mini">Kriterlere uygun bordro bulunamadı.</div>';
+        }
+        function card(p){
+            const badge=p.status==='odendi'?'<span class="badge success">Ödendi</span>':'<span class="badge warning">Bekliyor</span>';
+            return `<article class="salary-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <div style="font-weight:600">${p.person}</div>
+                    ${badge}
+                </div>
+                <div class="meta">
+                    <div><i class="fa-solid fa-calendar-days"></i> ${p.month}</div>
+                    <div><i class="fa-solid fa-money-bill"></i> Brüt ₺${p.gross.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div>
+                    <div><i class="fa-solid fa-wallet"></i> Net ₺${p.net.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div>
+                </div>
+                <div class="card-actions" style="display:flex; justify-content:flex-end; gap:6px; margin-top:8px;">
+                    <button class="details-btn" onclick="openDrawer(${p.id})"><i class="fa-solid fa-eye"></i> Detay</button>
+                    <button class="details-btn" onclick="openEditForm(${p.id})"><i class="fa-solid fa-pen"></i> Düzenle</button>
+                    <button class="details-btn" onclick="deleteSalary(${p.id})"><i class="fa-solid fa-trash"></i> Sil</button>
+                </div>
+            </article>`
+        }
+        function openDrawer(id){ const p=data.find(x=>x.id===id); document.getElementById('dwTitle').textContent=p.person; document.getElementById('dwBody').innerHTML=`
+            <div class="kv"><span>Ay</span><div>${p.month}</div></div>
+            <div class="kv"><span>Brüt</span><div>₺${p.gross.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div></div>
+            <div class="kv"><span>Net</span><div>₺${p.net.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div></div>
+            <div class="kv"><span>Durum</span><div>${p.status}</div></div>
+            <div><div class="section-title">Not</div><div>${p.note||'-'}</div></div>
+        `; document.getElementById('drawer').classList.add('open'); }
+        function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); }
+        function loadData(){ try{ const raw=localStorage.getItem(STORAGE_KEY); if(!raw){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; } const arr=JSON.parse(raw); if(!Array.isArray(arr)||arr.length===0){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; } return arr; } catch(e){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; } }
+        function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        let editId=null;
+        function openCreateForm(){ editId=null; document.getElementById('fmTitle').textContent='Yeni Bordro'; fillForm({person:'', month:'', gross:0, net:0, status:'bekliyor', note:''}); document.getElementById('formModal').setAttribute('data-open','true'); }
+        function openEditForm(id){ const p=data.find(x=>x.id===id); if(!p) return; editId=id; document.getElementById('fmTitle').textContent='Bordroyu Düzenle'; fillForm(p); document.getElementById('formModal').setAttribute('data-open','true'); }
+        function closeForm(){ document.getElementById('formModal').setAttribute('data-open','false'); }
+        function fillForm(p){ document.getElementById('f_person').value=p.person||''; if(p.month){ const [yy,mm]=p.month.split('-'); document.getElementById('f_year').value=yy; document.getElementById('f_month').value=mm; } document.getElementById('f_gross').value=p.gross!=null?p.gross:''; document.getElementById('f_net').value=p.net!=null?p.net:''; document.getElementById('f_status').value=p.status||'bekliyor'; document.getElementById('f_note').value=p.note||''; }
+        function readForm(){ const y=document.getElementById('f_year').value; const m=document.getElementById('f_month').value; return { person:(document.getElementById('f_person').value||'').trim(), month:`${y}-${m}`, gross:parseFloat(document.getElementById('f_gross').value||'0'), net:parseFloat(document.getElementById('f_net').value||'0'), status:document.getElementById('f_status').value, note:(document.getElementById('f_note').value||'').trim() }; }
+        // populate year/month selects
+        function populateYM(){ const ySel=document.getElementById('filterYear'); const fy=document.getElementById('f_year'); const fm=document.getElementById('f_month'); const mSel=document.getElementById('filterMonth'); const current=new Date().getFullYear(); const years=[]; for(let y=current-5;y<=current+2;y++){ years.push(y);} const months=['01','02','03','04','05','06','07','08','09','10','11','12']; [ySel,fy].forEach(sel=>{ if(!sel) return; sel.innerHTML=years.map(y=>`<option value="${y}">${y}</option>`).join(''); sel.value=String(current);}); [mSel,fm].forEach(sel=>{ if(!sel) return; sel.innerHTML=months.map(m=>`<option value="${m}">${m}</option>`).join(''); sel.value=(new Date().getMonth()+1).toString().padStart(2,'0');}); }
+        document.addEventListener('DOMContentLoaded', populateYM);
+        function saveForm(){ const payload=readForm(); if(!payload.person||!payload.month){ alert('Personel ve ay zorunludur.'); return; } if(editId==null){ data.push({id:Date.now(), ...payload}); } else { const idx=data.findIndex(x=>x.id===editId); if(idx>-1){ data[idx]={...data[idx], ...payload}; } } saveData(); closeForm(); render(); }
+        function deleteSalary(id){ const p=data.find(x=>x.id===id); const name=p?p.person:'kayıt'; if(!confirm(`${name} kaydını silmek istediğinize emin misiniz?`)) return; data=data.filter(x=>x.id!==id); saveData(); render(); }
+        render();
+    </script>
+</body>
+</html>
+
+

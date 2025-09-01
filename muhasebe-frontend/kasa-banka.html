@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasa/Banka - İnşaat Muhasebe PRO</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .filters { background:#fff; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px; display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .filter-input, .filter-select { border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:14px; }
+        .filter-input:focus, .filter-select:focus { outline:none; border-color: var(--green); box-shadow: 0 0 0 2px rgba(46,125,50,.10); }
+        .account-grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+        .account-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; transition:.16s; }
+        .account-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+        .meta { display:flex; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--muted); }
+        .badge { padding:3px 8px; border-radius:999px; border:1px solid var(--border); font-size:12px; }
+        .badge.success { background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+        .badge.warning { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+        .details-btn { border:1px solid var(--border); background:#fff; border-radius:8px; padding:6px 10px; cursor:pointer; }
+        .details-btn:hover { border-color: var(--green); }
+        .drawer { position: fixed; right: -480px; top:0; width: 420px; max-width: 95vw; height: 100vh; background:#fff; border-left:1px solid var(--border); box-shadow: -10px 0 20px rgba(0,0,0,.08); transition: right .2s ease; z-index: 200; display:flex; flex-direction:column; }
+        .drawer.open { right: 0; }
+        .drawer-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .drawer-body { padding:16px; overflow:auto; display:grid; gap:12px; }
+        .section-title { font-weight:600; margin: 12px 0 6px; font-size:15px; }
+        .kv { display:grid; grid-template-columns: 140px 1fr; gap:6px; font-size:14px; }
+        .kv span { color: var(--muted); }
+        /* Modal */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.15); display: none; align-items: center; justify-content: center; z-index: 300; }
+        .modal-backdrop[data-open="true"]{ display:flex; }
+        .modal { width: 720px; max-width: 95vw; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow: var(--shadow-lg); display:flex; flex-direction:column; }
+        .modal-header { padding:16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+        .modal-title { font-weight:600; }
+        .modal-body { padding:16px; display:grid; gap:12px; }
+        .modal-actions { padding:12px 16px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
+        .input-row { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+        .btn-group { display:flex; gap:6px; }
+        .field { display:grid; gap:6px; }
+        .field-label { font-size:12px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo"><i class="fa-solid fa-gear"></i></div>
+            <div class="brand-info"><h1>İnşaat Muhasebe PRO</h1><span class="version">Volass İnşaat</span></div>
+        </div>
+        <nav class="main-menu">
+            <button class="menu-item active" onclick="window.location.href='index.html'"><i class="fa-solid fa-book"></i><span>Tanımlar</span></button>
+            <button class="menu-item" onclick="window.location.href='hareketler.html'"><i class="fa-solid fa-right-left"></i><span>Hareketler</span></button>
+            <button class="menu-item"><i class="fa-solid fa-chart-bar"></i><span>Raporlar</span></button>
+            <button class="menu-item"><i class="fa-solid fa-life-ring"></i><span>Yardım</span></button>
+            <button class="menu-item" onclick="window.location.href='mesajlar.html'"><i class="fa-solid fa-comments"></i><span>Mesajlar</span></button>
+            <button class="menu-item" onclick="window.location.href='program-ayarlari.html'"><i class="fa-solid fa-cogs"></i><span>Bilgiler ve Yönetim</span></button>
+            <button class="menu-item"><i class="fa-solid fa-right-from-bracket"></i><span>Çıkış</span></button>
+        </nav>
+    </header>
+
+    <!-- Quick toolbar -->
+    <div class="quick-toolbar">
+        <div class="toolbar-container">
+            <button class="toolbar-item" onclick="window.location.href='index.html'"><i class="fa-solid fa-home"></i><span>Ana Sayfa</span></button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="content-header"><h2>Kasa/Banka</h2><div class="header-actions"><button class="btn btn-primary" onclick="openCreateForm()"><i class="fa-solid fa-plus"></i> Yeni Hesap</button></div></div>
+
+        <!-- Filters -->
+        <section class="filters">
+            <div class="field"><label class="field-label" for="filterType">Tür</label>
+                <select id="filterType" class="filter-select" title="Tür">
+                    <option value="">Tümü</option>
+                    <option value="kasa">Kasa</option>
+                    <option value="banka">Banka</option>
+                </select></div>
+            <div class="field"><label class="field-label" for="filterBank">Banka</label>
+                <input id="filterBank" class="filter-input" placeholder="Banka adı"></div>
+            <div class="field"><label class="field-label" for="filterIban">IBAN</label>
+                <input id="filterIban" class="filter-input" placeholder="IBAN"></div>
+            <div class="field"><label class="field-label" for="filterQuery">Arama</label>
+                <input id="filterQuery" class="filter-input" placeholder="Hesap adı veya açıklama"></div>
+        </section>
+
+        <!-- Accounts -->
+        <section id="accountGrid" class="account-grid"></section>
+    </main>
+
+    <!-- Drawer -->
+    <aside id="drawer" class="drawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="modal-title" id="dwTitle">Hesap Detayı</div>
+            <button class="details-btn" onclick="closeDrawer()"><i class="fa-solid fa-times"></i> Kapat</button>
+        </div>
+        <div class="drawer-body" id="dwBody"></div>
+    </aside>
+
+    <!-- Form Modal -->
+    <div id="formModal" class="modal-backdrop" data-open="false">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="fmTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="fmTitle">Yeni Hesap</div>
+                <button class="details-btn" onclick="closeForm()"><i class="fa-solid fa-times"></i> Kapat</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-row">
+                    <input id="f_name" class="filter-input" placeholder="Hesap adı">
+                    <select id="f_type" class="filter-select" title="Tür">
+                        <option value="kasa">Kasa</option>
+                        <option value="banka">Banka</option>
+                    </select>
+                    <input id="f_bank" class="filter-input" placeholder="Banka (Banka ise)">
+                    <input id="f_iban" class="filter-input" placeholder="IBAN">
+                    <input id="f_balance" class="filter-input" type="number" step="0.01" placeholder="Bakiye (₺)">
+                </div>
+                <textarea id="f_desc" class="filter-input" rows="3" placeholder="Açıklama"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeForm()">İptal</button>
+                <button class="btn btn-primary" onclick="saveForm()"><i class="fa-solid fa-save"></i> Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content"><span>Sunucu Tarihi: 16.07.2018</span><span>•</span><span>Lisans: DEMO İNŞAAT</span><span>•</span><span>Kullanıcı: Ana Kullanıcı</span></div>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = 'accounts';
+        const SEED = [
+            {id:1, name:'Merkez Kasa', type:'kasa', bank:'', iban:'', balance:12500.50, desc:'Şirket merkezi kasa hesabı'},
+            {id:2, name:'Ziraat Bankası TL', type:'banka', bank:'Ziraat', iban:'TR00 0000 0000 0000', balance:78500.00, desc:'TL vadesiz hesap'},
+            {id:3, name:'İş Bankası TL', type:'banka', bank:'İş Bankası', iban:'TR11 1111 1111 1111', balance:4500.00, desc:'Şantiye avansları için'}
+        ];
+        let data = loadData();
+
+        const grid = document.getElementById('accountGrid');
+        document.querySelectorAll('.filter-input,.filter-select').forEach(el=> el.addEventListener('input', render));
+
+        function render(){
+            const type = document.getElementById('filterType').value;
+            const bank = (document.getElementById('filterBank').value||'').toLocaleLowerCase('tr');
+            const iban = (document.getElementById('filterIban').value||'').toLocaleLowerCase('tr');
+            const q = (document.getElementById('filterQuery').value||'').toLocaleLowerCase('tr');
+
+            const list = data.filter(p=>
+                (!type || p.type===type) &&
+                (!bank || (p.bank||'').toLocaleLowerCase('tr').includes(bank)) &&
+                (!iban || (p.iban||'').toLocaleLowerCase('tr').includes(iban)) &&
+                (!q || (p.name||'').toLocaleLowerCase('tr').includes(q) || (p.desc||'').toLocaleLowerCase('tr').includes(q))
+            );
+
+            grid.innerHTML = list.map(p=>card(p)).join('') || '<div class="mini">Kriterlere uygun hesap bulunamadı.</div>';
+        }
+
+        function card(p){
+            const badge = p.type==='kasa' ? '<span class="badge warning">Kasa</span>' : '<span class="badge success">Banka</span>';
+            return `<article class="account-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <div style="font-weight:600">${p.name}</div>
+                    ${badge}
+                </div>
+                <div class="meta">
+                    ${p.bank ? `<div><i class=\"fa-solid fa-building-columns\"></i> ${p.bank}</div>` : ''}
+                    ${p.iban ? `<div><i class=\"fa-solid fa-hashtag\"></i> ${p.iban}</div>` : ''}
+                    <div><i class="fa-solid fa-coins"></i> ₺${p.balance.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div>
+                </div>
+                <div class="card-actions" style="margin-top:8px; display:flex; justify-content:flex-end; gap:6px;">
+                    <button class="details-btn" onclick="openDrawer(${p.id})"><i class="fa-solid fa-eye"></i> Detay</button>
+                    <button class="details-btn" onclick="openEditForm(${p.id})"><i class="fa-solid fa-pen"></i> Düzenle</button>
+                    <button class="details-btn" onclick="deleteAccount(${p.id})"><i class="fa-solid fa-trash"></i> Sil</button>
+                </div>
+            </article>`
+        }
+
+        function openDrawer(id){
+            const p = data.find(x=>x.id===id);
+            document.getElementById('dwTitle').textContent = p.name;
+            document.getElementById('dwBody').innerHTML = `
+                <div class="kv"><span>Tür</span><div>${p.type==='kasa'?'Kasa':'Banka'}</div></div>
+                ${p.bank?`<div class=\"kv\"><span>Banka</span><div>${p.bank}</div></div>`:''}
+                ${p.iban?`<div class=\"kv\"><span>IBAN</span><div>${p.iban}</div></div>`:''}
+                <div class="kv"><span>Bakiye</span><div>₺${p.balance.toLocaleString('tr-TR',{minimumFractionDigits:2})}</div></div>
+                <div><div class="section-title">Açıklama</div><div>${p.desc||'-'}</div></div>
+            `;
+            document.getElementById('drawer').classList.add('open');
+        }
+        function closeDrawer(){ document.getElementById('drawer').classList.remove('open'); }
+
+        // Storage helpers
+        function loadData(){
+            try{ const raw = localStorage.getItem(STORAGE_KEY); if(!raw){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; } const arr = JSON.parse(raw); if(!Array.isArray(arr)||arr.length===0){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; } return arr; } catch(e){ localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED)); return [...SEED]; }
+        }
+        function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+        // Form state
+        let editId = null;
+        function openCreateForm(){ editId=null; document.getElementById('fmTitle').textContent='Yeni Hesap'; fillForm({name:'', type:'kasa', bank:'', iban:'', balance:0, desc:''}); document.getElementById('formModal').setAttribute('data-open','true'); }
+        function openEditForm(id){ const p=data.find(x=>x.id===id); if(!p) return; editId=id; document.getElementById('fmTitle').textContent='Hesabı Düzenle'; fillForm(p); document.getElementById('formModal').setAttribute('data-open','true'); }
+        function closeForm(){ document.getElementById('formModal').setAttribute('data-open','false'); }
+        function fillForm(p){ document.getElementById('f_name').value=p.name||''; document.getElementById('f_type').value=p.type||'kasa'; document.getElementById('f_bank').value=p.bank||''; document.getElementById('f_iban').value=p.iban||''; document.getElementById('f_balance').value=p.balance!=null?p.balance:''; document.getElementById('f_desc').value=p.desc||''; }
+        function readForm(){ return { name:(document.getElementById('f_name').value||'').trim(), type:document.getElementById('f_type').value, bank:(document.getElementById('f_bank').value||'').trim(), iban:(document.getElementById('f_iban').value||'').trim(), balance: parseFloat(document.getElementById('f_balance').value||'0'), desc:(document.getElementById('f_desc').value||'').trim() }; }
+        function saveForm(){ const payload=readForm(); if(!payload.name){ alert('Hesap adı zorunludur.'); return; } if(editId==null){ const item={id:Date.now(), ...payload}; data.push(item);} else { const idx=data.findIndex(x=>x.id===editId); if(idx>-1){ data[idx]={...data[idx], ...payload}; } } saveData(); closeForm(); render(); }
+        function deleteAccount(id){ const p=data.find(x=>x.id===id); const name=p?p.name:'kayıt'; if(!confirm(`${name} kaydını silmek istediğinize emin misiniz?`)) return; data=data.filter(x=>x.id!==id); saveData(); render(); }
+
+        render();
+    </script>
+</body>
+</html>
+
+

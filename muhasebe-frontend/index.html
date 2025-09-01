@@ -21,11 +21,11 @@
         </div>
         
         <nav class="main-menu">
-            <button class="menu-item" data-menu="tanimlar" aria-expanded="false" aria-controls="submenu-tanimlar">
+            <button class="menu-item active" data-menu="tanimlar" aria-expanded="false" aria-controls="submenu-tanimlar">
                 <i class="fa-solid fa-book"></i>
                 <span>Tanımlar</span>
             </button>
-            <button class="menu-item active" data-menu="hareketler" aria-expanded="false" aria-controls="submenu-hareketler">
+            <button class="menu-item" data-menu="hareketler" aria-expanded="false" aria-controls="submenu-hareketler" onclick="window.location.href='hareketler.html'">
                 <i class="fa-solid fa-right-left"></i>
                 <span>Hareketler</span>
             </button>
@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-life-ring"></i>
                 <span>Yardım</span>
             </button>
-            <button class="menu-item" data-menu="mesajlar" aria-expanded="false" aria-controls="submenu-mesajlar">
+            <button class="menu-item" data-menu="mesajlar" aria-expanded="false" aria-controls="submenu-mesajlar" onclick="window.location.href='mesajlar.html'">
                 <i class="fa-solid fa-comments"></i>
                 <span>Mesajlar</span>
             </button>
@@ -55,29 +55,29 @@
     <!-- Mega Dropdown Menus -->
     <div class="mega-dropdown" data-open="false">
         <!-- Tanımlar Submenu -->
-        <div class="submenu" id="submenu-tanimlar" role="menu">
+        <div class="submenu" id="submenu-tanimlar">
             <div class="submenu-grid">
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='santiye-proje.html'">
                     <i class="fa-solid fa-project-diagram"></i>
                     <h3>Şantiyeler & Projeler</h3>
                     <p>Şantiye ve proje tanımları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='taseron.html'">
                     <i class="fa-solid fa-user-tie"></i>
                     <h3>Taşeron Kartları</h3>
                     <p>Taşeron bilgileri yönetimi</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='personel.html'">
                     <i class="fa-solid fa-users"></i>
                     <h3>Personel Kartları</h3>
                     <p>Personel kayıtları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='tedarikci.html'">
                     <i class="fa-solid fa-truck-loading"></i>
                     <h3>Tedarikçi Kartları</h3>
                     <p>Tedarikçi bilgileri</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='kasa-banka.html'">
                     <i class="fa-solid fa-university"></i>
                     <h3>Kasa/Banka Tanımları</h3>
                     <p>Finansal hesap tanımları</p>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Raporlar Submenu -->
-        <div class="submenu" id="submenu-raporlar" role="menu">
+        <div class="submenu" id="submenu-raporlar">
             <div class="submenu-grid">
                 <div class="submenu-item">
                     <i class="fa-solid fa-chart-pie"></i>
@@ -137,7 +137,7 @@
         </div>
 
         <!-- Yardım Submenu -->
-        <div class="submenu" id="submenu-yardim" role="menu">
+        <div class="submenu" id="submenu-yardim">
             <div class="submenu-grid">
                 <div class="submenu-item">
                     <i class="fa-solid fa-phone"></i>
@@ -152,31 +152,22 @@
             </div>
         </div>
 
-        <!-- Mesajlar Submenu -->
-        <div class="submenu" id="submenu-mesajlar" role="menu">
-            <div class="submenu-grid">
-                <div class="submenu-item">
-                    <i class="fa-solid fa-comments"></i>
-                    <h3>Muhasebeciler Arası Mesajlaşma</h3>
-                    <p>Ekip içi iletişim sistemi</p>
-                </div>
-            </div>
-        </div>
+        <!-- Mesajlar Submenu (kaldırıldı - doğrudan sayfaya gidiyor) -->
 
         <!-- Bilgiler ve Yönetim Submenu -->
-        <div class="submenu" id="submenu-bilgiler" role="menu">
+        <div class="submenu" id="submenu-bilgiler">
             <div class="submenu-grid">
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='firma-bilgileri.html'">
                     <i class="fa-solid fa-building"></i>
                     <h3>Firma Bilgileri</h3>
                     <p>Şirket profil ayarları</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='program-ayarlari.html'">
                     <i class="fa-solid fa-sliders-h"></i>
                     <h3>Program Ayarları</h3>
                     <p>Sistem konfigürasyonu</p>
                 </div>
-                <div class="submenu-item">
+                <div class="submenu-item" onclick="window.location.href='kullanici-yonetimi.html'">
                     <i class="fa-solid fa-user-shield"></i>
                     <h3>Kullanıcı Yönetimi</h3>
                     <p>Kullanıcı yetkileri</p>
@@ -185,7 +176,7 @@
         </div>
 
         <!-- Çıkış Submenu -->
-        <div class="submenu" id="submenu-cikis" role="menu">
+        <div class="submenu" id="submenu-cikis">
             <div class="submenu-grid">
                 <div class="submenu-item">
                     <i class="fa-solid fa-save"></i>
@@ -199,49 +190,41 @@
     <!-- Quick Access Toolbar -->
     <div class="quick-toolbar">
         <div class="toolbar-container">
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='santiye-proje.html'">
                 <i class="fa-solid fa-project-diagram"></i>
                 <span>Şantiye & Proje</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='taseron.html'">
                 <i class="fa-solid fa-user-tie"></i>
                 <span>Taşeron</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='personel.html'">
                 <i class="fa-solid fa-users"></i>
                 <span>Personel</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='tedarikci.html'">
                 <i class="fa-solid fa-truck-loading"></i>
                 <span>Tedarikçi</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='kasa-banka.html'">
                 <i class="fa-solid fa-university"></i>
                 <span>Kasa/Banka</span>
             </button>
-            <button class="toolbar-item">
-                <i class="fa-solid fa-stream"></i>
-                <span>Hareketler</span>
-            </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='puantaj.html'">
                 <i class="fa-solid fa-clipboard-list"></i>
                 <span>Puantaj</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='maas.html'">
                 <i class="fa-solid fa-money-bill-wave"></i>
                 <span>Maaş</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='cekler.html'">
                 <i class="fa-solid fa-money-check-alt"></i>
                 <span>Çekler</span>
             </button>
-            <button class="toolbar-item">
+            <button class="toolbar-item" onclick="window.location.href='teklif.html'">
                 <i class="fa-solid fa-file-signature"></i>
                 <span>Teklif</span>
-            </button>
-            <button class="toolbar-item">
-                <i class="fa-solid fa-chart-line"></i>
-                <span>İlerleme</span>
             </button>
             <button class="toolbar-item">
                 <i class="fa-solid fa-folder-open"></i>

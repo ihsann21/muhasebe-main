@@ -437,11 +437,11 @@ document.addEventListener('DOMContentLoaded', () => {
     new LogCardManager();
     new AccessibilityManager();
 
-    // Set initial active state for "Hareketler" menu
-    const hareketlerMenu = document.querySelector('[data-menu="hareketler"]');
-    if (hareketlerMenu) {
-        hareketlerMenu.classList.add('active');
-        hareketlerMenu.setAttribute('aria-expanded', 'true');
+    // Set initial active state for "Tanımlar" menu (ana sayfa)
+    const tanimlarMenu = document.querySelector('[data-menu="tanimlar"]');
+    if (tanimlarMenu) {
+        tanimlarMenu.classList.add('active');
+        tanimlarMenu.setAttribute('aria-expanded', 'true');
     }
 });
 
