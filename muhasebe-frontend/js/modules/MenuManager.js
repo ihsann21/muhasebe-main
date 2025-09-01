@@ -122,6 +122,9 @@ export class MenuManager {
                 activeMenuItem.setAttribute('aria-expanded', 'true');
             }
 
+            // Scroll to top to show the dropdown
+            this.scrollToShowDropdown();
+
             // Auto-close after 5 seconds
             this.autoCloseTimeout = setTimeout(() => {
                 this.closeDropdown();
@@ -163,6 +166,25 @@ export class MenuManager {
             this.autoCloseTimeout = setTimeout(() => {
                 this.closeDropdown();
             }, 5000);
+        }
+    }
+
+    scrollToShowDropdown() {
+        // Get the mega dropdown element
+        const megaDropdown = document.querySelector('.mega-dropdown');
+        if (megaDropdown) {
+            // Calculate the position to scroll to (top of the dropdown)
+            const dropdownTop = megaDropdown.offsetTop;
+            const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Only scroll if the dropdown is not fully visible
+            if (currentScrollTop > dropdownTop - 100) {
+                // Smooth scroll to show the dropdown
+                window.scrollTo({
+                    top: Math.max(0, dropdownTop - 100),
+                    behavior: 'smooth'
+                });
+            }
         }
     }
 

@@ -3,6 +3,7 @@ import { MenuManager } from './js/modules/MenuManager.js';
 import { ToolbarManager } from './js/modules/ToolbarManager.js';
 import { ButtonManager } from './js/modules/ButtonManager.js';
 import { AccessibilityManager } from './js/modules/AccessibilityManager.js';
+import { ReportManager } from './js/modules/ReportManager.js';
 
 // Utility functions
 function announceToScreenReader(message) {
@@ -21,9 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const toolbarManager = new ToolbarManager();
     new ButtonManager();
     new AccessibilityManager();
+    const reportManager = new ReportManager();
 
-    // Make toolbarManager globally accessible
+    // Make managers globally accessible
     window.toolbarManager = toolbarManager;
+    window.reportManager = reportManager;
 
     // Initialize sidebar functionality for the main page
     toolbarManager.initSidebar();
@@ -266,8 +269,12 @@ function initSupportFunctionality() {
         scrollToBottom();
     }
 
-    function scrollToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Global function for scrolling to bottom
+    window.scrollToBottom = function() {
+        const chatMessages = document.getElementById('chatMessages');
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
     }
 
     function getBotResponse(message) {
@@ -291,22 +298,24 @@ function initSupportFunctionality() {
     function handleFileUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            addFileMessage(file, chatMessages);
+            window.addFileMessage(file, chatMessages);
             // Reset file input
             event.target.value = '';
         }
     }
 
-    function handleFloatingFileUpload(event) {
+    // Global function for floating file upload
+    window.handleFloatingFileUpload = function(event) {
         const file = event.target.files[0];
         if (file) {
-            addFileMessage(file, floatingChatMessages);
+            window.addFileMessage(file, floatingChatMessages);
             // Reset file input
             event.target.value = '';
         }
     }
 
-    function addFileMessage(file, messagesContainer) {
+    // Global function for adding file messages
+    window.addFileMessage = function(file, messagesContainer) {
         const fileDiv = document.createElement('div');
         fileDiv.className = 'message user-message';
         
@@ -326,7 +335,7 @@ function initSupportFunctionality() {
             fileType = 'document';
         }
 
-        const fileSize = formatFileSize(file.size);
+        const fileSize = window.formatFileSize(file.size);
         
         fileDiv.innerHTML = `
             <div class="message-avatar">
@@ -354,10 +363,11 @@ function initSupportFunctionality() {
         `;
         
         messagesContainer.appendChild(fileDiv);
-        scrollToBottom();
+        window.scrollToBottom();
     }
 
-    function formatFileSize(bytes) {
+    // Global function for formatting file size
+    window.formatFileSize = function(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
